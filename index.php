@@ -1,19 +1,19 @@
 <html>
     <head>
-        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-    <div id="container">
+    <div class="loginPannel" >
+        <h1 id="loginTitle">LOGIN</h1>
         <form action="verification.php" method="POST">
-        <h1>Login</h1>
-        
-        <input type="text" placeholder="username" name="username" required>
-        <input type="password" placeholder="password" name="password" required>
-
-        <input type="submit" id='submit' value='LOGIN' >
-        </form>
+        <div id="loginContainer">
+            <input type="text" placeholder="username" name="username" class="fieldLogin" required>
+            <input type="password" placeholder="password" name="password" class="fieldLogin" required>
+            <input type="submit" id='submit' value='LOGIN' class="fieldLogin">
     </div>
+       </div>        
+        </form>
     </body>
 </html>
