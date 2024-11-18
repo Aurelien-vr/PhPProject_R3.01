@@ -1,6 +1,51 @@
-form {
-    display: flex;
-    flex-direction: column;
+body{
+    font-family:'Lexend', sans-serif;
+    margin-left: 0;
+    margin-top: 0; 
+    padding: 0; 
+    overflow: hidden;
+    height: 100vh; 
+    width: 100vw;  
+    background-image: url("../img/image.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-#submit {}
+.loginPannel{
+    display: flex;
+    flex-direction: column;
+    background-color: #143649;
+    width: 35vw;
+    height: 100vh;
+    align-items: center;
+    justify-content:center;
+    
+}
+
+#loginTitle{
+    color: #F1D35B;
+}
+
+#loginContainer{
+    display: flex;
+    flex-direction: column;
+
+    height: 50vh;
+    width: 50vh;
+}
+
+.fieldLogin{
+    justify-content: center;
+    justify-items: center;
+}
+
+.input{
+    font-family: inherit;
+}
+
+
+/*
+TODO: make a glass box for the field
+TODO: align correctly the element inside the box
+*/
