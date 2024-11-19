@@ -24,8 +24,7 @@ body{
 
 #loginTitle{
     color: #F1D35B;
-    margin-top: -7vh;
-    margin-bottom: 4vh;
+    margin-top: -5vh;
 }
 
 #loginContainer{
@@ -33,7 +32,7 @@ body{
     flex-direction: column;
 
     height: 25vh;
-    width: 30vh;
+    width: 35vh;
 
     background: rgba(0, 0, 0, 0.35);
     border-radius: 16px;
@@ -44,7 +43,6 @@ body{
 
     align-items: center;
     align-content: center;
-    scale: 1.1;
 }
 
 .fieldLogin{
@@ -52,28 +50,15 @@ body{
     font-family: inherit;
 }
 
-input{
-    border-radius: 6px;
-    height: 4vh;
-    box-shadow: none;
-    outline: none;
-    border: none;
+#userNameId{
+    margin-top: 5vh;
 }
 
-#userNameId{
-    margin-top: 4vh;
+input{
+    border-radius: 9px;
+    height: 6vh;
 }
 
 #submit{
-    margin-bottom: 3vh;
-    color: #F1D35B;
-    background-color: #20627B;
-    border-radius: 100px;    
-    font-size:unset ;
-    font-size: 80%;
-    scale: 1.2;
-}
-
-#submit:hover{
-    outline: 1px solid #F1D35B;
+    margin-bottom: 5vh;
 }

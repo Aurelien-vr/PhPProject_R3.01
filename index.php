@@ -9,9 +9,9 @@
         <h1 id="loginTitle">LOGIN</h1>
         <form action="verification.php" method="POST">
         <div id="loginContainer">
-            <input type="text" placeholder="username" name="username" class="fieldLogin" required>
+            <input type="text" placeholder="username" name="username" class="fieldLogin" id="userNameId" required>
             <input type="password" placeholder="password" name="password" class="fieldLogin" required>
-            <input type="submit" id='submit' value='LOGIN' class="fieldLogin">
+            <input type="submit" id='submit' value='LOGIN' class="fieldLogin" >
     </div>
        </div>        
         </form>
