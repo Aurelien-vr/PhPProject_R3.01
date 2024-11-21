@@ -22,10 +22,14 @@ body{
     justify-content:center;
 }
 
+.loginPannel > *{
+    scale: 1.4;
+}
+
 #loginTitle{
     color: #F1D35B;
-    margin-top: -7vh;
-    margin-bottom: 4vh;
+    margin-top: -17vh;
+    margin-bottom: 15vh;
 }
 
 #loginContainer{
