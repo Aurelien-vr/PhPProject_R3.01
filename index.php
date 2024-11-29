@@ -10,12 +10,19 @@
     <?php
         // http://localhost/PhPProject_R3.01/index.php
 
-        // Connection à la bd
+        $host = 'mysql-malekaurel.alwaysdata.net'; // Nom de l'hôte
+        $dbname = 'malekaurel_bdd';           // Nom de la base de données
+        $username = '386527';                     // Nom d'utilisateur MySQL
+        $password = '9g^aYMeUs#yQKU';         // Mot de passe MySQL
+        
         try {
-            $linkpdo = new PDO("mysql:host=localhost;dbname=carnetcontact", "root", "");
-        } catch (Exception $e) {
-            die('Erreur : ' . $e->getMessage());
+            // Tentative de connexion à la base de données
+            $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);
+        } catch (PDOException $e) {
+            // Si la connexion échoue, affiche l'erreur
+            echo "Erreur de connexion : Changer de réseau pour cous connecter à la base de données";
         }
+        
 
         if(false){
             header('Location: /PhPProject_R3.01/acceuil.php');
@@ -29,8 +36,8 @@
             <input type="text" placeholder="username" name="username" class="fieldLogin" id="userNameId" required>
             <input type="password" placeholder="password" name="password" class="fieldLogin" required>
             <input type="submit" id='submit' value='LOGIN' class="fieldLogin" >
-    </div>
-       </div>        
+        </div>
         </form>
+    </div>        
     </body>
 </html>
