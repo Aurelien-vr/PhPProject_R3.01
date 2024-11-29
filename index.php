@@ -1,5 +1,4 @@
 <html>
-   
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
@@ -22,6 +21,12 @@
             // Si la connexion échoue, affiche l'erreur
             echo "Erreur de connexion : Changer de réseau pour cous connecter à la base de données";
         }
+
+        'SELECT COUNT(*)
+        FROM Utilisateurs 
+        WHERE logins = ?
+        AND motDePasse = ?;
+        ';
         
 
         if(false){
