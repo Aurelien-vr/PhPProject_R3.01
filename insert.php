@@ -7,52 +7,50 @@
     </head>
     <body>
     <?php
-        // http://localhost/PhPProject_R3.01/index.php
-        // https://phpmyadmin.alwaysdata.com/phpmyadmin/index.php?route=/&route=%2F&lang=en
-        
-        if (!empty($_POST['username']) && !empty($_POST['password'])) {
-            $log = $_POST['username'];
-            $pwd = $_POST['password']; 
-        
+        if (!empty($_POST['username'])) {
+            $login = $_POST['username'];
+        }
+        if (!empty($_POST['password'])) {
+            $pwd = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        }
+
+        if (!empty($login) && !empty($pwd)) { // Vérifiez que les deux variables sont définies
             $host = 'mysql-malekaurel.alwaysdata.net';
             $dbname = 'malekaurel_bdd';
             $username = '386527';
             $password = '9g^aYMeUs#yQKU';
-        
+
             try {
-                // Connexion à la base de données
                 $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-                $stmt = $pdo->prepare("SELECT motDePasse FROM Utilisateurs WHERE logins = :login");
-                $stmt->bindParam(':login', $log, PDO::PARAM_STR);
-                $stmt->execute();
-        
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-                if ($result && password_verify($pwd, $result['motDePasse'])) {
-                    echo "Accès autorisé.";
-                    // header('Location: /PhPProject_R3.01/acceuil.php');
-                    // exit();
-                } else {
-                    echo "Accès refusé.";
-                }
             } catch (PDOException $e) {
-                echo "Erreur : " . $e->getMessage();
+                die("Erreur de connexion : " . $e->getMessage());
+            }
+
+            // Préparation de la requête avec les variables corrigées
+            $stmt = $pdo->prepare("CALL insertUtilisateur(:login, :password)");
+            $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $pwd, PDO::PARAM_STR);
+
+            try {
+                $stmt->execute();
+                echo "Utilisateur inséré avec succès.";
+            } catch (PDOException $e) {
+                echo "Erreur lors de l'insertion : " . $e->getMessage();
             }
         } else {
             echo "Veuillez remplir tous les champs.";
         }
     ?>
     <div class="loginPannel" >
-        <h1 id="loginTitle">LOGIN</h1>
-        <form action="index.php" method="POST">
+    <h1 id="loginPannel">INSERT TEMP</h1>
+        <form action="insert.php" method="POST">
         <div id="loginContainer">
             <input type="text" placeholder="username" name="username" class="fieldLogin" id="userNameId" required>
             <input type="password" placeholder="password" name="password" class="fieldLogin" required>
-            <input type="submit" id='submit' value='LOGIN' class="fieldLogin" >
+            <input type="submit" id='submit' value='INSERT' class="fieldLogin" >
         </div>
-        </form>
-    </div>     
+        </form> 
+    </div>       
     </body>
 </html>
