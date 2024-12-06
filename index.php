@@ -60,7 +60,7 @@
         <div id="loginContainer">
             <input type="text" placeholder="username" name="username" class="fieldLogin" id="userNameId" required>
             <input type="password" placeholder="password" name="password" class="fieldLogin" required>
-            <div id="messageErreur">  <?php echo htmlspecialchars($message); ?> </div>
+            <div id="messageErreur" class="error">  <?php echo htmlspecialchars($message); ?> </div>
             <input type="submit" id='submit' value='LOGIN' class="fieldLogin" >
         </div>
         </form>
