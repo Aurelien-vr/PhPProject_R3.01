@@ -81,3 +81,15 @@ input{
 #submit:hover{
     outline: 1px solid #F1D35B;
 }
+
+#messageErreur {
+    text-align: center;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+.success {
+    color: green;
+}
+.error {
+    color: red;
+}
