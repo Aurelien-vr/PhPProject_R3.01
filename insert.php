@@ -7,15 +7,12 @@
 </head>
 <body>
 <?php
-$message = ''; // Initialiser la variable pour les messages
-$successClass = 'error'; // Par défaut, la classe CSS est pour les erreurs
+    $message = '';
+    $successClass = 'error'; 
+    $login = '';
 
-// Variables pour conserver les valeurs saisies
-$loginValue = isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '';
-$passwordValue = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+    // Vérifier si la page a été appelée après un POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $login = $_POST['username'];
         $password = $_POST['password'];
 
@@ -55,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $message = "Utilisateur $login inséré avec succès.";
                     $successClass = 'success';
 
-                    $loginValue = '';
-                    $passwordValue = '';
+                    // Redirection pour éviter la soumission multiple de données lors du rafraîchissement
+                    header('Location: insert.php?message=success');
+                    exit; // Terminer l'exécution après la redirection
                 }
             } catch (PDOException $e) {
                 // Message spécifique en cas d'échec de connexion à la base de données
@@ -67,11 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-    } else {
-        $message = "Veuillez remplir tous les champs.";
     }
-}
+
+    // Vérifier s'il y a un message passé en GET via la redirection
+    if (isset($_GET['message']) && $_GET['message'] == 'success') {
+        $message = "Utilisateur inséré avec succès!";
+        $successClass = 'success';
+    }
 ?>
+
 <div class="loginPannel">
     <h1 id="loginPannel">INSERT</h1>
     <form action="insert.php" method="POST">
@@ -81,21 +83,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    name="username" 
                    class="fieldLogin" 
                    id="userNameId" 
-                   value="<?php echo $loginValue; ?>" 
+                   value="<?php echo htmlspecialchars($login); ?>" 
                    required>
             <input type="password" 
                    placeholder="password (8-60 caractères)" 
                    name="password" 
                    class="fieldLogin" 
                    id="passwordId" 
-                   value="<?php echo $passwordValue; ?>" 
                    required>
-            <input type="submit" id='submit' value='INSERT' class="fieldLogin">
+            <input type="submit" id="submit" value="INSERT" class="fieldLogin">
             <div id="messageErreur" class="<?php echo $successClass; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         </div>
     </form>
 </div>
+
 </body>
 </html>

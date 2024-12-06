@@ -7,7 +7,6 @@
     </head>
     <body>
         <?php
-            header('Location: //index.php');
             
         ?>
     </body>
