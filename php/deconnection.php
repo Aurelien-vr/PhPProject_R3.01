@@ -1,17 +1,24 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
         <title>Volley Manager</title>
     </head>
     <body>
-        <?php
-            session_start();
-            session_unset();
-            session_destroy();
-            header('Location: ../login.php');
-            exit;
-        ?>
+    <?php
+        session_start();
+
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
+        session_unset();
+        session_destroy();
+
+        header('Location: ../login.php');
+        exit;
+    ?>
+
     </body>
 </html>
