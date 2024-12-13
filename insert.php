@@ -7,6 +7,12 @@
 </head>
 <body>
 <?php
+    session_start();
+    if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+        header('Location: login.php');
+        exit;
+    }
+
     $message = '';
     $successClass = 'error'; 
     $login = '';
@@ -29,6 +35,7 @@
             $dbPassword = '9g^aYMeUs#yQKU';
 
             try {
+                
                 $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $dbPassword);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

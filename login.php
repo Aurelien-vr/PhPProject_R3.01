@@ -7,7 +7,7 @@
     </head>
     <body>
     <?php
-        // http://localhost/PhPProject_R3.01/index.php
+        // http://localhost/PhPProject_R3.01/login.php
         // https://phpmyadmin.alwaysdata.com/phpmyadmin/index.php?route=/&route=%2F&lang=en
         $message = ''; // Initialiser la variable message
         $log = '';  // Initialiser le login
@@ -31,7 +31,7 @@
                     // Connexion à la base de données
                     $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);
                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            
                     $stmt = $pdo->prepare("SELECT motDePasse FROM Utilisateurs WHERE logins = :login");
                     $stmt->bindParam(':login', $log, PDO::PARAM_STR);
                     $stmt->execute();
@@ -39,6 +39,10 @@
                     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($result && password_verify($pwd, $result['motDePasse'])) {
+                        session_start();
+                        $_SESSION['logged_in'] = true;
+                        $_SESSION['login'] = $log;
+
                         // Redirection après connexion réussie
                         header('Location: /PhPProject_R3.01/acceuil.php?message=success');
                         exit();
@@ -60,7 +64,7 @@
     ?>
     <div class="loginPannel">
         <h1 id="loginTitle">LOGIN</h1>
-        <form action="index.php" method="POST">
+        <form action="login.php" method="POST">
             <div id="loginContainer">
                 <input type="text" placeholder="username" value="<?php echo htmlspecialchars($log); ?>"  name="username" class="fieldLogin" id="userNameId" required>
                 <input type="password" placeholder="password" name="password" class="fieldLogin" required>
