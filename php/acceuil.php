@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
         <title>Volley Manager</title>
     </head>
@@ -17,13 +17,14 @@
             <nav>
                 <div class="nav"><a href="">ACCEUIL</a></div>
                 <div class="nav"><a href="joueurs.php">JOUEURS</a></div>
-                <div class="nav"><a href="match_futurs.php">MATCHS</a>
+                <div class="navs">
+                    <a href="match_futurs.php">MATCHS</a>
                     <div class="submenu">
-                        <div><a href="match_futurs.php">Matchs Futurs</a></div>
-                        <div><a href="match_passes.php">Matchs Passes</a></div>
+                        <div><a href="match_passes.php">PASSÉS</a></div>
+                        <div><a href="match_futurs.php">FUTURS</a></div>
                     </div>
                 </div>
-                <div class="nav"><a href="">SE DECONNECTER</a></div>
+                <div class="nav"><a href="deconnection.php">SE DECONNECTER</a></div>
             </nav>
         </header>
     </body>

@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Volley Manager</title>
 </head>
@@ -60,7 +60,7 @@
                     $successClass = 'success';
 
                     // Redirection pour éviter la soumission multiple de données lors du rafraîchissement
-                    header('Location: insert.php?message=success');
+                    header('Location: php/insert.php?message=success');
                     exit; // Terminer l'exécution après la redirection
                 }
             } catch (PDOException $e) {
@@ -82,7 +82,7 @@
 ?>
 
 <div class="loginPannel">
-    <h1 id="loginPannel">INSERT</h1>
+    <h1 id="loginTitle">INSERT</h1>
     <form action="insert.php" method="POST">
         <div id="loginContainer">
             <input type="text" 

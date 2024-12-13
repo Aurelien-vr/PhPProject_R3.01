@@ -44,7 +44,7 @@
                         $_SESSION['login'] = $log;
 
                         // Redirection après connexion réussie
-                        header('Location: /PhPProject_R3.01/acceuil.php?message=success');
+                        header('Location: /PhPProject_R3.01/php/acceuil.php?message=success');
                         exit();
                     } else {
                         $message = "Accès refusé.";
@@ -68,10 +68,10 @@
             <div id="loginContainer">
                 <input type="text" placeholder="username" value="<?php echo htmlspecialchars($log); ?>"  name="username" class="fieldLogin" id="userNameId" required>
                 <input type="password" placeholder="password" name="password" class="fieldLogin" required>
+                <input type="submit" id="submit" value="LOGIN" class="fieldLogin">
                 <div id="messageErreur" class="error">
                     <?php echo htmlspecialchars($message); ?>
                 </div>
-                <input type="submit" id="submit" value="LOGIN" class="fieldLogin">
             </div>
         </form>
     </div>     

@@ -37,7 +37,7 @@ body{
     display: flex;
     flex-direction: column;
 
-    height: 25vh;
+
     width: 30vh;
 
     background: rgba(0, 0, 0, 0.35);
@@ -52,8 +52,13 @@ body{
     scale: 1.1;
 }
 
+#loginContainer > *{
+    margin: 1vh;
+}
+
 .fieldLogin{
-    margin: auto;
+    /*margin: auto;*/
+    margin-bottom: 1vh !important;
     font-family: inherit;
 }
 
@@ -87,11 +92,13 @@ input{
     text-align: center;
     font-weight: bold;
     word-wrap: break-word;
+    z-index: 2400;
 }
 .success {
-    color: green;
+    color: rgb(81, 163, 81);
 }
 .error {
+<<<<<<< Updated upstream
     color: red;
 }
 
@@ -153,3 +160,7 @@ nav {
 .navs:hover .submenu {
     display: block;
 }
+=======
+    color: rgb(173, 48, 48);
+}
+>>>>>>> Stashed changes
