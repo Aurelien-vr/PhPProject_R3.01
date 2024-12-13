@@ -12,6 +12,7 @@ body{
     background-position: center;
 }
 
+/* LOGIN ET INSERT */
 .loginPannel{
     display: flex;
     flex-direction: column;
@@ -92,4 +93,63 @@ input{
 }
 .error {
     color: red;
+}
+
+header {
+    background-color: #133f4e;
+    color: white;
+    padding: 10px 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav, .navs {
+    position: relative; 
+}
+
+.nav a, .navs > a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+}
+
+.nav a:hover, .navs > a:hover {
+    background-color: #39778d;
+}
+
+.submenu {
+    position: absolute;
+    top: 100%; 
+    left: 50%; 
+    transform: translateX(-50%);
+    background-color: #356475;
+    display: none; 
+    padding: 10px 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 100; 
+}
+
+.submenu div {
+    padding: 5px 20px;
+}
+
+.submenu div a {
+    color: white;
+    text-decoration: none;
+}
+
+.submenu div a:hover {
+    background-color: #39778d;
+}
+
+/* Affiche le sous-menu au survol du parent */
+.navs:hover .submenu {
+    display: block;
 }
