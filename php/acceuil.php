@@ -18,19 +18,19 @@
                 exit;
             }
         ?>
-        <header>
-            <nav>
-                <div class="nav"><a href="acceuil.php">ACCEUIL</a></div>
-                <div class="nav"><a href="joueurs.php">JOUEURS</a></div>
-                <div class="navs">
-                    <a href="match_futurs.php">MATCHS</a>
-                    <div class="submenu">
-                        <div><a href="match_passes.php">PASSÉS</a></div>
-                        <div><a href="match_futurs.php">FUTURS</a></div>
-                    </div>
-                </div>
-                <div class="nav"><a href="deconnection.php">SE DECONNECTER</a></div>
-            </nav>
-        </header>
+         <?php include 'header.php'; ?>
+
+         <div id="containerTable">
+             <table>
+                 <tr id="table">
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Team</th>
+                </tr>
+            </table>
+         </div>
+
+
     </body>
 </html>

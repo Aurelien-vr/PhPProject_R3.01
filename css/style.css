@@ -10,6 +10,7 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    justify-content: center;
 }
 
 /* LOGIN ET INSERT */
@@ -158,4 +159,17 @@ nav {
 /* Affiche le sous-menu au survol du parent */
 .navs:hover .submenu {
     display: block;
+}
+
+#containerTable{
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(218, 180, 147, 0.75);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
 }
