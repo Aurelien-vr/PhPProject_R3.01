@@ -70,8 +70,43 @@
             }
 
             public function getJoueurs() {
-                return $this->createRequest("SELECT nom, prenom, statutJoueur, commentaire FROM Joueurs ORDER BY nom, prenom", null);
+                return $this->createRequest(
+                    "SELECT * FROM Joueurs ORDER BY nom, prenom", 
+                    null
+                );
             }
+
+            public function getMatch($idMatch) {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                return $this->createRequest(
+                    "SELECT * FROM Matchs WHERE IDMatch = :idMatch", 
+                    $param
+                );
+            }
+
+            public function getSet($idSet) {
+                $param = [
+                    ':idSet' => $idSet
+                ];
+                return $this->createRequest(
+                    "SELECT * FROM Sets WHERE IDSet = :idSet", 
+                    $param
+                );
+            }           
+            
+            public function getEtreSelectionner($numLicence, $idMatch) {
+                $param = [
+                    ':numLicence' => $numLicence,
+                    ':idMatch' => $idMatch
+                ];
+                return $this->createRequest(
+                    "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
+                    $param
+                );
+            }
+            
 
             public function insertJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
                 $param = [
@@ -148,6 +183,120 @@
                     $param
                 );
             }
+
+            public function updateJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
+                $param = [
+                    ':id' => $id,
+                    ':nom' => $nom,
+                    ':prenom' => $prenom,
+                    ':dateNaissance' => $dateNaissance,
+                    ':taille' => $taille,
+                    ':poids' => $poids,
+                    ':statutJoueur' => $statutJoueur,
+                    ':commentaire' => $commentaire
+                ];
+                return $this->createRequest(
+                    "UPDATE Joueurs 
+                     SET nom = :nom, prenom = :prenom, dateNaissance = :dateNaissance, taille = :taille, poids = :poids, 
+                         statutJoueur = :statutJoueur, commentaire = :commentaire
+                     WHERE numLicence = :id",
+                    $param
+                );
+            }
+
+            public function updateMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
+                $param = [
+                    ':idMatch' => $idMatch,
+                    ':dateMatch' => $dateMatch,
+                    ':nomAdversaires' => $nomAdversaires,
+                    ':lieuRencontre' => $lieuRencontre,
+                    ':domicileON' => $domicileON,
+                    ':avoirGagnerMatch' => $avoirGagnerMatch
+                ];
+                return $this->createRequest(
+                    "UPDATE Matchs 
+                     SET dateMatch = :dateMatch, nomAdversaires = :nomAdversaires, lieuRencontre = :lieuRencontre, 
+                         domicileON = :domicileON, avoirGagnerMatch = :avoirGagnerMatch
+                     WHERE IDMatch = :idMatch",
+                    $param
+                );
+            }
+            
+            public function updateSet($idSet, $scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch) {
+                $param = [
+                    ':idSet' => $idSet,
+                    ':scoreEquipe' => $scoreEquipe,
+                    ':scoreAdversaire' => $scoreAdversaire,
+                    ':tieBreak' => $tieBreak,
+                    ':idMatch' => $idMatch
+                ];
+                return $this->createRequest(
+                    "UPDATE Sets 
+                     SET scoreEquipe = :scoreEquipe, scoreAdversaire = :scoreAdversaire, tieBreak = :tieBreak, 
+                         IDMatch = :idMatch
+                     WHERE IDSet = :idSet",
+                    $param
+                );
+            }
+            
+            public function updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, $notationJoueur, $nbRemplacements) {
+                $param = [
+                    ':numLicence' => $numLicence,
+                    ':idMatch' => $idMatch,
+                    ':titulaireON' => $titulaireON,
+                    ':poste' => $poste,
+                    ':notationJoueur' => $notationJoueur,
+                    ':nbRemplacements' => $nbRemplacements
+                ];
+                return $this->createRequest(
+                    "UPDATE EtreSelectionner 
+                     SET titulaireON = :titulaireON, poste = :poste, notationJoueur = :notationJoueur, nbRemplacements = :nbRemplacements
+                     WHERE numLicence = :numLicence AND IDMatch = :idMatch",
+                    $param
+                );
+            }
+            
+            public function deleteJoueur($numLicence) {
+                $param = [
+                    ':numLicence' => $numLicence
+                ];
+                return $this->createRequest(
+                    "DELETE FROM Joueurs WHERE numLicence = :numLicence", 
+                    $param
+                );
+            }
+            
+            public function deleteMatch($idMatch) {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                return $this->createRequest(
+                    "DELETE FROM Matchs WHERE IDMatch = :idMatch", 
+                    $param
+                );
+            }
+            
+            public function deleteSet($idSet) {
+                $param = [
+                    ':idSet' => $idSet
+                ];
+                return $this->createRequest(
+                    "DELETE FROM Sets WHERE IDSet = :idSet", 
+                    $param
+                );
+            }
+            
+            public function deleteEtreSelectionner($numLicence, $idMatch) {
+                $param = [
+                    ':numLicence' => $numLicence,
+                    ':idMatch' => $idMatch
+                ];
+                return $this->createRequest(
+                    "DELETE FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
+                    $param
+                );
+            }
+            
             
         }
     ?>
