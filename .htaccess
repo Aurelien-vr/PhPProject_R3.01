@@ -1,0 +1,4 @@
+<Files "php/bdd.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

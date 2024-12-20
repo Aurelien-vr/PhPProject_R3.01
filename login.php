@@ -22,12 +22,14 @@
                 $log = $_POST['username'];
                 $pwd = $_POST['password'];
 
-                require 'bdd.php';
+                require 'php/bdd.php';
+                
                 $BDD = new BDD();
                 $error = $BDD->getError();
+
                 if($error=='success'){
                     $result = $BDD->getPWD($log);
-                    if ($result && password_verify($pwd, $result['motDePasse'])) {
+                    if ($result!=null && password_verify($pwd, $result['motDePasse'])) {
                         session_start();
                         $_SESSION['logged_in'] = true;
                         $_SESSION['login'] = $log;
@@ -36,7 +38,7 @@
                         header('Location: /PhPProject_R3.01/php/acceuil.php?message=success');
                         exit();
                     } else {
-                        $message = "Accès refusé.";
+                        $message = "Accès refusé." . $BDD->getError();
                     }
                 } elseif (strpos($error, 'SQLSTATE') !== false) {
                     $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
