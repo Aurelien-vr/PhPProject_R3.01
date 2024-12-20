@@ -6,17 +6,19 @@
         <title>Volley Manager</title>
     </head>
     <body>
-        <?php
-            session_start();
-            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
 
-            if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-                header('Location: ../login.php');
-                exit;
-            }
-        ?>
          <?php include 'header.php'; ?>
+         <div id="containerTable">
+             <table>
+                <header>
+                    <tr id="table">
+                       <th>ID</th>
+                       <th>Name</th>
+                       <th>Position</th>
+                       <th>Team</th>
+                    </tr>
+                </header>
+            </table>
+         </div>
     </body>
 </html>

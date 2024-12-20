@@ -7,18 +7,51 @@
         <title>Volley Manager</title>
     </head>
     <body>
-        <?php
-            session_start();
 
-            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+        <?php include 'header.php'; ?>
 
-            if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-                header('Location: ../login.php');
-                exit;
+        <div id="containerTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr cclass="collapsible" onclick="toggleRow(this)">
+                        <td>1</td>
+                        <td>John Smith</td>
+                    </tr>
+                    <tr class="hidden hiddenStill">
+                        <td colspan="2">More details about John Smith...</td>
+                    </tr>
+                    <tr class="foldable" onclick="toggleRow(this)">
+                        <td>2</td>
+                        <td>Alice Brown</td>
+                    </tr>
+                    <tr class="hidden hiddenStill">
+                        <td colspan="2">
+                            <div>
+                                <p>More details about Alice Brown...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <script>
+        function toggleRow(row) {
+            const nextRow = row.nextElementSibling;
+
+            if (nextRow && nextRow.classList.contains('hidden')) {
+                nextRow.classList.remove('hidden');
+            } else if (nextRow) {
+                nextRow.classList.add('hidden');
             }
-        ?>
-         <?php include 'header.php'; ?>
+        }
+    </script>
+
     </body>
 </html>

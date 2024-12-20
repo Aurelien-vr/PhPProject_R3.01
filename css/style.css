@@ -12,8 +12,6 @@ body{
     background-position: center;
     justify-content: center;
 }
-
-/* LOGIN ET INSERT */
 .loginPannel{
     display: flex;
     flex-direction: column;
@@ -23,17 +21,14 @@ body{
     align-items: center;
     justify-content:center;
 }
-
 .loginPannel > *{
     scale: 1.4;
 }
-
 #loginTitle{
     color: #F1D35B;
     margin-top: -17vh;
     margin-bottom: 15vh;
 }
-
 #loginContainer{
     display: flex;
     flex-direction: column;
@@ -52,17 +47,14 @@ body{
     align-content: center;
     scale: 1.1;
 }
-
 #loginContainer > *{
     margin: 1vh;
 }
-
 .fieldLogin{
     /*margin: auto;*/
     margin-bottom: 1vh !important;
     font-family: inherit;
 }
-
 input{
     border-radius: 6px;
     height: 4vh;
@@ -70,11 +62,9 @@ input{
     outline: none;
     border: none;
 }
-
 #userNameId{
     margin-top: 4vh;
 }
-
 #submit{
     margin-bottom: 3vh;
     color: #F1D35B;
@@ -84,11 +74,9 @@ input{
     font-size: 80%;
     scale: 1.2;
 }
-
 #submit:hover{
     outline: 1px solid #F1D35B;
 }
-
 #messageErreur {
     text-align: center;
     font-weight: bold;
@@ -167,9 +155,34 @@ nav {
     margin: 20px auto;
     margin-left: 20%;
     margin-right: 20%;
+    border-radius: 12px;
     backdrop-filter: blur(13px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(218, 180, 147, 0.75);
-    border-radius: 12px;
+    background-color: rgba(215, 183, 154, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse; 
+}
+
+th{
+    padding: 2%;
+    font-size: 16px;
+}
+
+td{
+    align-items: center;
+    padding: 1%;
+}
+
+td > div{
+    border-top: 1px solid hsla(0, 0%, 100%, 0.274);
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.274)
+}
+
+.hidden {
+    display: none;
 }
