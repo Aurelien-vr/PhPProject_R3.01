@@ -62,6 +62,7 @@
                 return null;
             }
             
+            // SELECT
             public function getPWD($log) {
                 $param = [
                     ':login' => $log
@@ -107,7 +108,7 @@
                 );
             }
             
-
+            // INSERT
             public function insertJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
                 $param = [
                     ':id' => $id,
@@ -184,6 +185,7 @@
                 );
             }
 
+            // UPDATE
             public function updateJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
                 $param = [
                     ':id' => $id,
@@ -255,7 +257,8 @@
                     $param
                 );
             }
-            
+
+            // DELETE
             public function deleteJoueur($numLicence) {
                 $param = [
                     ':numLicence' => $numLicence
