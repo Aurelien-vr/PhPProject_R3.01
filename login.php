@@ -22,22 +22,11 @@
                 $log = $_POST['username'];
                 $pwd = $_POST['password'];
 
-                $host = 'mysql-malekaurel.alwaysdata.net';
-                $dbname = 'malekaurel_bdd';
-                $username = '386527';
-                $password = '9g^aYMeUs#yQKU';
-
-                try {
-                    // Connexion à la base de données
-                    $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-                    $stmt = $pdo->prepare("SELECT motDePasse FROM Utilisateurs WHERE logins = :login");
-                    $stmt->bindParam(':login', $log, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+                require 'bdd.php';
+                $BDD = new BDD();
+                $error = $BDD->getError();
+                if($error=='success'){
+                    $result = $BDD->getPWD($log);
                     if ($result && password_verify($pwd, $result['motDePasse'])) {
                         session_start();
                         $_SESSION['logged_in'] = true;
@@ -49,13 +38,10 @@
                     } else {
                         $message = "Accès refusé.";
                     }
-                } catch (PDOException $e) {
-                    // Message spécifique en cas d'échec de connexion à la base de données
-                    if (strpos($e->getMessage(), 'SQLSTATE') !== false) {
-                        $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
-                    } else {
-                        $message = "Erreur lors de l'identification : " . $e->getMessage();
-                    }
+                } elseif (strpos($error, 'SQLSTATE') !== false) {
+                    $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
+                } else {
+                    $message = "Erreur lors de l'identification : " . $error;
                 }
             } else {
                 $message = "Veuillez remplir tous les champs.";
