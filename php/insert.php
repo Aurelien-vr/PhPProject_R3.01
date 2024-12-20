@@ -28,49 +28,25 @@
         } elseif (strlen($password) < 8 || strlen($password) > 60) {
             $message = "Le mot de passe doit avoir entre 8 et 60 caractères.";
         } else {
-            // Connexion à la base de données
-            $host = 'mysql-malekaurel.alwaysdata.net';
-            $dbname = 'malekaurel_bdd';
-            $username = '386527';
-            $dbPassword = '9g^aYMeUs#yQKU';
 
-            try {
-                
-                $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $dbPassword);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            require 'bdd.php';
+            $BDD = new BDD();
+            if($BDD->getError()=='success'){
 
-                // Vérifier si le login existe déjà
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM Utilisateurs WHERE logins = :login");
-                $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $loginExists = $stmt->fetchColumn();
-
-                if ($loginExists) {
-                    $message = "Le login \"$login\" est déjà utilisé. Veuillez en choisir un autre.";
-                } else {
-                    // Insérer l'utilisateur si le login est unique
-                    $pwd = password_hash($password, PASSWORD_BCRYPT);
-                    $stmt = $pdo->prepare("CALL insertUtilisateur(:login, :password)");
-                    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-                    $stmt->bindParam(':password', $pwd, PDO::PARAM_STR);
-
-                    $stmt->execute();
+                if ($BDD->getPWD($login) == null) { 
+                    $password = password_hash($password, PASSWORD_BCRYPT);
+                    $BDD->insertUtilisateur($login, $password);
                     $message = "Utilisateur $login inséré avec succès.";
                     $successClass = 'success';
-
-                    // Redirection pour éviter la soumission multiple de données lors du rafraîchissement
-                    header('Location: php/insert.php?message=success');
-                    exit; // Terminer l'exécution après la redirection
-                }
-            } catch (PDOException $e) {
-                // Message spécifique en cas d'échec de connexion à la base de données
-                if (strpos($e->getMessage(), 'SQLSTATE') !== false) {
-                    $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
                 } else {
-                    $message = "Erreur lors de l'insertion : " . $e->getMessage();
+                    $message = "Le login \"$login\" est déjà utilisé. Veuillez en choisir un autre.";
                 }
+                
+
+            } else{
+                $message = $BDD->getError();
             }
+            
         }
     }
 

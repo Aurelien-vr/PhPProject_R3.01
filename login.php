@@ -23,11 +23,11 @@
                 $pwd = $_POST['password'];
 
                 require 'php/bdd.php';
-                
-                $BDD = new BDD();
-                $error = $BDD->getError();
 
-                if($error=='success'){
+                $BDD = new BDD();
+
+                if($BDD->getError()=='success'){
+
                     $result = $BDD->getPWD($log);
                     if ($result!=null && password_verify($pwd, $result['motDePasse'])) {
                         session_start();
@@ -40,10 +40,9 @@
                     } else {
                         $message = "Accès refusé." . $BDD->getError();
                     }
-                } elseif (strpos($error, 'SQLSTATE') !== false) {
-                    $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
-                } else {
-                    $message = "Erreur lors de l'identification : " . $error;
+
+                } else{
+                    $message = $BDD->getError();
                 }
             } else {
                 $message = "Veuillez remplir tous les champs.";
