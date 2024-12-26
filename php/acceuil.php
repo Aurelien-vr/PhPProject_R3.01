@@ -26,7 +26,7 @@
                    SUM(CASE WHEN avoirGagnerMatch = 1 THEN 1 ELSE 0 END) AS gagnes,
                    SUM(CASE WHEN avoirGagnerMatch = 0 THEN 1 ELSE 0 END) AS perdus,
                    SUM(CASE WHEN avoirGagnerMatch IS NULL THEN 1 ELSE 0 END) AS non_renseignes
-                 FROM Matchs";
+                 FROM Matchs WHERE DATE(dateMatch) <= CURDATE()";
        $stats = $bdd->createRequest($query, []);
        $gagnes = $stats['gagnes'] ?? 0;
        $perdus = $stats['perdus'] ?? 0;
@@ -57,7 +57,7 @@
         include 'header.php'; 
     ?>
 
-<h1>Statistiques des matchs</h1>
+<h1>Statistiques des matchs passés</h1>
     <div class="pie-chart" style="<?= $pie_chart_style ?>"></div>
     <div class="legend">
         <?php if ($total > 0): ?>
