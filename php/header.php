@@ -13,7 +13,7 @@
 ?>
 <header>
     <nav>
-        <div class="nav"><a href="acceuil.php">ACCEUIL</a></div>
+        <div class="nav"><a href="acceuil.php">ACCUEIL</a></div>
         <div class="nav"><a href="joueurs.php">JOUEURS</a></div>
         <div class="navs">
             <a href="match_futurs.php">MATCHS</a>

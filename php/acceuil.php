@@ -53,7 +53,23 @@
             #6c757d " . (($pourcentage_gagnes + $pourcentage_perdus) * 360 /100) . "deg
         );";
 
-        
+        $query = "
+        SELECT 
+            joueur.nomJoueur AS joueur,
+            ROUND(AVG(note), 2) AS moyenne_note
+        FROM 
+            NotesJoueur nj
+        JOIN 
+            Joueurs joueur ON nj.idJoueur = joueur.idJoueur
+        GROUP BY 
+            joueur.nomJoueur
+        ORDER BY 
+            moyenne_note DESC
+        LIMIT 3;
+        ";
+
+        $topJoueurs = $bdd->createRequest($query, []);
+
         include 'header.php'; 
     ?>
 
@@ -68,5 +84,29 @@
             <div><span class="gray"></span>Aucune donnée disponible</div>
         <?php endif; ?>
     </div>
+    <h2>Podium des meilleurs joueurs</h2>
+<div class="podium">
+    <?php if (!empty($topJoueurs)): ?>
+        <div class="place first">
+            <span class="medal">🥇</span>
+            <strong><?= $topJoueurs[0]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[0]['moyenne_note'] ?>)
+        </div>
+        <?php if (isset($topJoueurs[1])): ?>
+        <div class="place second">
+            <span class="medal">🥈</span>
+            <strong><?= $topJoueurs[1]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[1]['moyenne_note'] ?>)
+        </div>
+        <?php endif; ?>
+        <?php if (isset($topJoueurs[2])): ?>
+        <div class="place third">
+            <span class="medal">🥉</span>
+            <strong><?= $topJoueurs[2]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[2]['moyenne_note'] ?>)
+        </div>
+        <?php endif; ?>
+    <?php else: ?>
+        <p>Aucune donnée disponible pour le podium.</p>
+    <?php endif; ?>
+</div>
+
 </body>
 </html>

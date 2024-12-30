@@ -213,3 +213,46 @@ td > div{
 .green { background-color: #28a745; }
 .red { background-color: #dc3545; }
 .gray { background-color: #6c757d; }
+
+/* podium */
+.podium {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+.place {
+    text-align: center;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.place.first {
+    background-color: gold;
+    color: black;
+    font-weight: bold;
+}
+
+.place.second {
+    background-color: silver;
+    color: black;
+    font-weight: bold;
+}
+
+.place.third {
+    background-color: #cd7f32; /* Couleur bronze */
+    color: black;
+    font-weight: bold;
+}
+
+.medal {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
