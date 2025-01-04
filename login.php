@@ -34,7 +34,7 @@
                         session_start();
                         $_SESSION['logged_in'] = true;
                         $_SESSION['login'] = $log;
-
+                        
                         // Redirection après connexion réussie
                         $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                         $newUrl = str_replace('login.php', 'php/acceuil.php?message=success', $currentUrl);
