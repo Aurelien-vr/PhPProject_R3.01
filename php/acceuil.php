@@ -73,20 +73,23 @@
         include 'header.php'; 
     ?>
 
-<h1>Statistiques des matchs passés</h1>
-    <div class="pie-chart" style="<?= $pie_chart_style ?>"></div>
-    <div class="legend">
-        <?php if ($total > 0): ?>
-            <div><span class="green"></span>Matchs Gagnés (<?= round($pourcentage_gagnes, 2) ?>%)</div>
-            <div><span class="red"></span>Matchs Perdus (<?= round($pourcentage_perdus, 2) ?>%)</div>
-            <div><span class="gray"></span>Non Renseignés (<?= round($pourcentage_non_renseignes, 2) ?>%)</div>
-        <?php else: ?>
-            <div><span class="gray"></span>Aucune donnée disponible</div>
-        <?php endif; ?>
+<div class="acceuilPCdiv">
+    <h1>Statistiques des matchs passés</h1>
+    <div id="divPc">
+        <div class="pie-chart" style="<?= $pie_chart_style ?>"></div>
+        <div class="legend">
+            <?php if ($total > 0): ?>
+                <div><span class="green"></span>Matchs Gagnés (<?= round($pourcentage_gagnes, 2) ?>%)</div>
+                <div><span class="red"></span>Matchs Perdus (<?= round($pourcentage_perdus, 2) ?>%)</div>
+                <div><span class="gray"></span>Non Renseignés (<?= round($pourcentage_non_renseignes, 2) ?>%)</div>
+            <?php else: ?>
+                <div><span class="gray"></span>Aucune donnée disponible</div>
+            <?php endif; ?>
+        </div>
     </div>
     <h2>Podium des meilleurs joueurs</h2>
-<div class="podium">
-    <?php if (!empty($topJoueurs)): ?>
+    <div class="podium">
+        <?php if (!empty($topJoueurs)): ?>
         <div class="place first">
             <span class="medal">🥇</span>
             <strong><?= $topJoueurs[0]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[0]['moyenne_note'] ?>)
@@ -103,9 +106,10 @@
             <strong><?= $topJoueurs[2]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[2]['moyenne_note'] ?>)
         </div>
         <?php endif; ?>
-    <?php else: ?>
-        <p>Aucune donnée disponible pour le podium.</p>
-    <?php endif; ?>
+        <?php else: ?>
+            <p>Aucune donnée disponible pour le podium.</p>
+            <?php endif; ?>
+        </div>
 </div>
 
 </body>

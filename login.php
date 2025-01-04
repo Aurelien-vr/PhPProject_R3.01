@@ -35,7 +35,9 @@
                         $_SESSION['login'] = $log;
 
                         // Redirection après connexion réussie
-                        header('Location: /PhPProject_R3.01/php/acceuil.php?message=success');
+                        $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                        $newUrl = str_replace('login.php', 'php/acceuil.php?message=success', $currentUrl);
+                        header('Location: ' . $newUrl);
                         exit();
                     } else {
                         $message = "Accès refusé." . $BDD->getError();

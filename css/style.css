@@ -12,6 +12,31 @@ body{
     background-position: center;
     justify-content: center;
 }
+
+h1, h2{
+    font-family: 'Lexend', sans-serif;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 12px;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    padding: 1%;
+    background-color: rgba(207, 207, 172, 0.459);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.acceuilPCdiv{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+}
+
 .loginPannel{
     display: flex;
     flex-direction: column;
@@ -32,17 +57,13 @@ body{
 #loginContainer{
     display: flex;
     flex-direction: column;
-
-
     width: 30vh;
-
     background: rgba(0, 0, 0, 0.35);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(0px);
     -webkit-backdrop-filter: blur(0px);
     border: 1px solid rgba(0, 0, 0, 0.32);
-
     align-items: center;
     align-content: center;
     scale: 1.1;
@@ -255,4 +276,24 @@ td > div{
 .medal {
     font-size: 1.5rem;
     margin-right: 10px;
+}
+
+#divPc{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 12px;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(215, 183, 154, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    padding: 3%;
+    padding-left: 8%;
+    padding-right: 8%;
+    text-align: center;
+    gap: 20px; 
 }
