@@ -44,14 +44,16 @@
                     $stmt = $this->pdo->prepare($request);
                     
                     // Bind des variables
-                    foreach ($param as $cle => $valeur) {
-                        $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
+                    if ($param && is_array($param)) {
+                        foreach ($param as $cle => $valeur) {
+                            $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
+                        }
                     }
                     $stmt->execute();
             
                     // Si c'est un SELECT, retourner les résultats
                     if (stripos($request, 'SELECT') === 0) {
-                        return $stmt->fetch(PDO::FETCH_ASSOC);
+                        return $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
             
                     // Pour INSERT, UPDATE, DELETE, retourner true si succès

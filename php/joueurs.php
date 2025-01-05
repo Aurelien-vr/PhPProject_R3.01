@@ -8,7 +8,27 @@
     </head>
     <body>
 
-        <?php include 'header.php'; ?>
+
+    <?php include 'header.php';?>
+    <?php
+        include 'bdd.php'; 
+        $db = new BDD(); 
+        $player = [34, 'John', 'Doe', '1990-05-15', 180, 75, 'Actif', 'Aucun'];
+        $res = $db->insertJoueur($player[0], $player[1], $player[2], $player[3], $player[4], $player[5], $player[6], $player[7]);
+        if ($res) {
+            echo "Joueur ajouté avec succès !";
+        } else {
+            echo "Une erreur est survenue lors de l'ajout du joueur : " . $db->getError();
+        }
+        
+        $joueurs = $db->getJoueurs();
+        if ($joueurs) {
+            $joueurs_json = json_encode($joueurs);
+            echo "<script>console.log('Players:', $joueurs_json);</script>";
+        } else {
+            echo "<script>console.log('No players found.');</script>";
+        }
+    ?>
 
         <div id="containerTable">
             <table>
