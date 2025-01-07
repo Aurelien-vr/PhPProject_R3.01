@@ -43,27 +43,25 @@
                 try {
                     $stmt = $this->pdo->prepare($request);
                     
-                    // Bind des variables
-                    if ($param && is_array($param)) {
-                        foreach ($param as $cle => $valeur) {
-                            $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
-                        }
+                    // Bind variables
+                    foreach ($param as $cle => $valeur) {
+                        $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
                     }
                     $stmt->execute();
-            
-                    // Si c'est un SELECT, retourner les résultats
+
+                    // If it's a SELECT, return the results
                     if (stripos($request, 'SELECT') === 0) {
-                        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        return $stmt->fetch(PDO::FETCH_ASSOC);
                     }
-            
-                    // Pour INSERT, UPDATE, DELETE, retourner true si succès
+
+                    // For INSERT, UPDATE, DELETE, return true if successful
                     return true;
                 } catch (PDOException $e) {
                     $this->error = $e->getMessage();
                 }
                 return null;
             }
-            
+
             // SELECT
             public function getPWD($log) {
                 $param = [

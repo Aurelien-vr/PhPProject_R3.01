@@ -29,6 +29,7 @@
                 if($BDD->getError()=='success'){
 
                     $result = $BDD->getPWD($log);
+
                     if ($result!=null && password_verify($pwd, $result['motDePasse'])) {
                         session_start();
                         $_SESSION['logged_in'] = true;
@@ -38,6 +39,7 @@
                         $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                         $newUrl = str_replace('login.php', 'php/acceuil.php?message=success', $currentUrl);
                         header('Location: ' . $newUrl);
+                        
                         exit();
                     } else {
                         $message = "Accès refusé." . $BDD->getError();
