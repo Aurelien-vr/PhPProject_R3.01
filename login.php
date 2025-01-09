@@ -44,7 +44,6 @@
                     } else {
                         $message = "Accès refusé." . $BDD->getError();
                     }
-
                 } else{
                     $message = $BDD->getError();
                 }

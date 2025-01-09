@@ -1,77 +1,65 @@
+<?php
+require_once 'bdd.php'; // Use require_once to ensure it's only included once
+$db = new BDD(); 
 
+$joueurs = $db->getJoueurs();
+?>
+
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
-        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <title>Volley Manager</title>
-    </head>
-    <body>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Volley Manager</title>
+</head>
+<body>
 
+<?php include 'header.php';?>
 
-    <?php include 'header.php';?>
-    <?php
-        include 'bdd.php'; 
-        $db = new BDD(); 
-        $player = [34, 'John', 'Doe', '1990-05-15', 180, 75, 'Actif', 'Aucun'];
-        $res = $db->insertJoueur($player[0], $player[1], $player[2], $player[3], $player[4], $player[5], $player[6], $player[7]);
-        if ($res) {
-            echo "Joueur ajouté avec succès !";
-        } else {
-            echo "Une erreur est survenue lors de l'ajout du joueur : " . $db->getError();
-        }
-        
-        $joueurs = $db->getJoueurs();
-        if ($joueurs) {
-            $joueurs_json = json_encode($joueurs);
-            echo "<script>console.log('Players:', $joueurs_json);</script>";
-        } else {
-            echo "<script>console.log('No players found.');</script>";
-        }
-    ?>
+<div id="containerTable">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (is_array($joueurs) && !empty($joueurs)) {
+                foreach ($joueurs as $joueur) {
+                    $id = htmlspecialchars($joueur['numLicence']);
+                    $name = htmlspecialchars($joueur['nom'] . ' ' . $joueur['prenom']);
+                    $details = htmlspecialchars('More details about ' . $name . '...');
 
-        <div id="containerTable">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr cclass="collapsible" onclick="toggleRow(this)">
-                        <td>1</td>
-                        <td>John Smith</td>
-                    </tr>
-                    <tr class="hidden hiddenStill">
-                        <td colspan="2">More details about John Smith...</td>
-                    </tr>
-                    <tr class="foldable" onclick="toggleRow(this)">
-                        <td>2</td>
-                        <td>Alice Brown</td>
-                    </tr>
-                    <tr class="hidden hiddenStill">
-                        <td colspan="2">
-                            <div>
-                                <p>More details about Alice Brown...</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    <script>
-        function toggleRow(row) {
-            const nextRow = row.nextElementSibling;
-
-            if (nextRow && nextRow.classList.contains('hidden')) {
-                nextRow.classList.remove('hidden');
-            } else if (nextRow) {
-                nextRow.classList.add('hidden');
+                    echo "<tr class='collapsible' onclick='toggleRow(this)'>";
+                    echo "<td>{$id}</td>";
+                    echo "<td>{$name}</td>";
+                    echo "</tr>";
+                    echo "<tr class='hidden hiddenStill'>";
+                    echo "<td colspan='2'>{$details}</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2'>No players found.</td></tr>";
             }
-        }
-    </script>
+            ?>
+        </tbody>
+    </table>
+</div>
 
-    </body>
+<script>
+    function toggleRow(row) {
+        const nextRow = row.nextElementSibling;
+
+        if (nextRow && nextRow.classList.contains('hidden')) {
+            nextRow.classList.remove('hidden');
+        } else if (nextRow) {
+            nextRow.classList.add('hidden');
+        }
+    }
+</script>
+
+</body>
 </html>

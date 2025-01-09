@@ -74,7 +74,7 @@
     ?>
 
 <div class="acceuilPCdiv">
-    <h1>Statistiques des matchs passés</h1>
+    <h1 class="h1">Statistiques des matchs passés</h1>
     <div id="divPc">
         <div class="pie-chart" style="<?= $pie_chart_style ?>"></div>
         <div class="legend">

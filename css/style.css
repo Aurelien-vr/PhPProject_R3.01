@@ -13,7 +13,7 @@ body{
     justify-content: center;
 }
 
-h1, h2{
+.h1, h2{
     font-family: 'Lexend', sans-serif;
     width: 100vw;
     display: flex;
@@ -289,7 +289,7 @@ td > div{
     border-radius: 12px;
     backdrop-filter: blur(13px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(215, 183, 154, 0.75);
+    background-color: rgba(215, 183, 154, 0.599);
     border: 1px solid rgba(255, 255, 255, 0.125);
     padding: 3%;
     padding-left: 8%;

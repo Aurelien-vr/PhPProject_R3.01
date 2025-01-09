@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE HTML> 
 <html>
     <head>
@@ -45,15 +47,17 @@
                     
                     // Bind variables
                     foreach ($param as $cle => $valeur) {
-                        $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
+                        $stmt->bindValue($cle, $valeur, PDO::PARAM_STR);
                     }
                     $stmt->execute();
-
-                    // If it's a SELECT, return the results
-                    if (stripos($request, 'SELECT') === 0) {
+            
+                    // If it's a SELECT, return the results as an array
+                    if (stripos($request, 'SELECT motDePasse') === 0){
                         return $stmt->fetch(PDO::FETCH_ASSOC);
+                    }else if (stripos($request, 'SELECT') === 0) {
+                        return $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
-
+            
                     // For INSERT, UPDATE, DELETE, return true if successful
                     return true;
                 } catch (PDOException $e) {
@@ -71,10 +75,11 @@
             }
 
             public function getJoueurs() {
-                return $this->createRequest(
-                    "SELECT * FROM Joueurs ORDER BY nom, prenom", 
-                    null
-                );
+                $result = $this->createRequest("SELECT * FROM Joueurs ORDER BY nom, prenom", []);
+                if (!is_array($result)) {
+                    return [];
+                }
+                return $result;
             }
 
             public function getMatch($idMatch) {
@@ -120,11 +125,17 @@
                     ':statutJoueur' => $statutJoueur,
                     ':commentaire' => $commentaire
                 ];
-                return $this->createRequest(
-                    "INSERT INTO Joueurs (numLicence, nom, prenom, dateNaissance, taille, poids, statutJoueur, commentaire)
-                    VALUES (:id, :nom, :prenom, :dateNaissance, :taille, :poids, :statutJoueur, :commentaire)",
-                    $param
-                );
+                
+                try {
+                    return $this->createRequest(
+                        "INSERT INTO Joueurs (numLicence, nom, prenom, dateNaissance, taille, poids, statutJoueur, commentaire)
+                         VALUES (:id, :nom, :prenom, :dateNaissance, :taille, :poids, :statutJoueur, :commentaire)",
+                        $param
+                    );
+                } catch (PDOException $e) {
+                    $this->error = $e->getMessage();
+                    return false;
+                }
             }
             
             public function insertMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
