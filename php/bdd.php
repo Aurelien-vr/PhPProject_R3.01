@@ -39,34 +39,37 @@
             public function getError() {
                 return $this->error;
             }
-
             public function createRequest($request, $param) {
                 $this->error = '';
                 try {
                     $stmt = $this->pdo->prepare($request);
-                    
-                    // Bind variables
-                    foreach ($param as $cle => $valeur) {
-                        $stmt->bindValue($cle, $valeur, PDO::PARAM_STR);
+            
+                    if ($param != null) {
+                        foreach ($param as $key => $value) {
+                            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+                        }
                     }
+            
                     $stmt->execute();
             
-                    // If it's a SELECT, return the results as an array
-                    if (stripos($request, 'SELECT motDePasse') === 0){
-                        return $stmt->fetch(PDO::FETCH_ASSOC);
-                    }else if (stripos($request, 'SELECT') === 0) {
+                    // Déterminer si c'est un SELECT
+                    if (stripos($request, 'SELECT') === 0) {
+                        if (stripos($request, 'LIMIT 1') !== false || preg_match('/^SELECT .* FROM .* WHERE .*$/i', $request)) {
+                            return $stmt->fetch(PDO::FETCH_ASSOC);
+                        }
                         return $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
             
-                    // For INSERT, UPDATE, DELETE, return true if successful
+                    // Pour INSERT, UPDATE, DELETE, retourner true si succès
                     return true;
                 } catch (PDOException $e) {
                     $this->error = $e->getMessage();
                 }
+            
                 return null;
             }
 
-            // SELECT
+            // SELECT   
             public function getPWD($log) {
                 $param = [
                     ':login' => $log

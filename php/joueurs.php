@@ -1,8 +1,9 @@
 <?php
 require_once 'bdd.php'; // Use require_once to ensure it's only included once
 $db = new BDD(); 
-
 $joueurs = $db->getJoueurs();
+$joueursJson= json_encode($joueurs);
+echo "<script>console.log('$joueursJson');</script>";
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +32,11 @@ $joueurs = $db->getJoueurs();
                 foreach ($joueurs as $joueur) {
                     $id = htmlspecialchars($joueur['numLicence']);
                     $name = htmlspecialchars($joueur['nom'] . ' ' . $joueur['prenom']);
-                    $details = htmlspecialchars('More details about ' . $name . '...');
+                    $details = 'Date de naissance: ' . htmlspecialchars($joueur['dateNaissance']) .
+                    '<br>Taille: ' . htmlspecialchars($joueur['taille']) .
+                    '<br>Poids: ' . htmlspecialchars($joueur['poids']) .
+                    '<br>Statut: ' . htmlspecialchars($joueur['statutJoueur']) .
+                    '<br>Commentaire: ' . htmlspecialchars($joueur['commentaire']);
 
                     echo "<tr class='collapsible' onclick='toggleRow(this)'>";
                     echo "<td>{$id}</td>";
