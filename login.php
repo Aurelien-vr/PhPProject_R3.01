@@ -22,23 +22,15 @@
                 $log = $_POST['username'];
                 $pwd = $_POST['password'];
 
-                $host = 'mysql-malekaurel.alwaysdata.net';
-                $dbname = 'malekaurel_bdd';
-                $username = '386527';
-                $password = '9g^aYMeUs#yQKU';
+                require 'php/bdd.php';
 
-                try {
-                    // Connexion à la base de données
-                    $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-                    $stmt = $pdo->prepare("SELECT motDePasse FROM Utilisateurs WHERE logins = :login");
-                    $stmt->bindParam(':login', $log, PDO::PARAM_STR);
-                    $stmt->execute();
+                $BDD = new BDD();
 
-                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                if($BDD->getError()=='success'){
 
-                    if ($result && password_verify($pwd, $result['motDePasse'])) {
+                    $result = $BDD->getPWD($log);
+
+                    if ($result!=null && password_verify($pwd, $result['motDePasse'])) {
                         session_start();
                         $_SESSION['logged_in'] = true;
                         $_SESSION['login'] = $log;
@@ -49,15 +41,10 @@
                         header('Location: ' . $newUrl);
                         exit();
                     } else {
-                        $message = "Accès refusé.";
+                        $message = "Accès refusé." . $BDD->getError();
                     }
-                } catch (PDOException $e) {
-                    // Message spécifique en cas d'échec de connexion à la base de données
-                    if (strpos($e->getMessage(), 'SQLSTATE') !== false) {
-                        $message = "Connexion à la base de données échouée. Pensez à utiliser un réseau Wi-Fi sans restrictions.";
-                    } else {
-                        $message = "Erreur lors de l'identification : " . $e->getMessage();
-                    }
+                } else{
+                    $message = $BDD->getError();
                 }
             } else {
                 $message = "Veuillez remplir tous les champs.";

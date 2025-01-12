@@ -1,19 +1,21 @@
 <!-- header.php -->
 <?php
-            session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
-            if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-                header('Location: ../login.php');
-                exit;
-            }
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: ../login.php');
+    exit;
+}
 ?>
 <header>
     <nav>
-        <div class="nav"><a href="acceuil.php">ACCEUIL</a></div>
+        <div class="nav"><a href="acceuil.php">ACCUEIL</a></div>
         <div class="nav"><a href="joueurs.php">JOUEURS</a></div>
         <div class="navs">
             <a href="match_futurs.php">MATCHS</a>

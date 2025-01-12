@@ -12,6 +12,31 @@ body{
     background-position: center;
     justify-content: center;
 }
+
+.h1, h2{
+    font-family: 'Lexend', sans-serif;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 12px;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    padding: 1%;
+    background-color: rgba(207, 207, 172, 0.459);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.acceuilPCdiv{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+}
+
 .loginPannel{
     display: flex;
     flex-direction: column;
@@ -32,17 +57,13 @@ body{
 #loginContainer{
     display: flex;
     flex-direction: column;
-
-
     width: 30vh;
-
     background: rgba(0, 0, 0, 0.35);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(0px);
     -webkit-backdrop-filter: blur(0px);
     border: 1px solid rgba(0, 0, 0, 0.32);
-
     align-items: center;
     align-content: center;
     scale: 1.1;
@@ -168,9 +189,15 @@ table {
     border-collapse: collapse; 
 }
 
-th{
+th, td {
     padding: 2%;
     font-size: 16px;
+    text-align: center; /* Center horizontally */
+    vertical-align: middle; /* Center vertically */
+}
+
+th {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
 }
 
 td{
@@ -185,4 +212,118 @@ td > div{
 
 .hidden {
     display: none;
+}
+
+.hiddenStill {
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Subtle top border */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
+}
+
+/* camenbert */
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 10px auto;
+    width: 200px;
+}
+
+.legend div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.legend div span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.green { background-color: #28a745; }
+.red { background-color: #dc3545; }
+.gray { background-color: #6c757d; }
+
+/* podium */
+.podium {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+.place {
+    text-align: center;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.place.first {
+    background-color: gold;
+    color: black;
+    font-weight: bold;
+}
+
+.place.second {
+    background-color: silver;
+    color: black;
+    font-weight: bold;
+}
+
+.place.third {
+    background-color: #cd7f32; /* Couleur bronze */
+    color: black;
+    font-weight: bold;
+}
+
+.medal {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+#divPc{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 12px;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(215, 183, 154, 0.599);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    padding: 3%;
+    padding-left: 8%;
+    padding-right: 8%;
+    text-align: center;
+    gap: 20px; 
+}
+
+.editButton {
+    background-color: #b4dbeb;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #7ca6b5;
 }
