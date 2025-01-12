@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE HTML> 
 <html>
     <head>
@@ -85,6 +83,23 @@
                 return $result;
             }
 
+
+            public function getMatchsPassee() {
+                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW()", []);
+                if (!is_array($result)) {
+                    return [];
+                }
+                return $result;
+            }
+
+            public function getMatchsFutur() {
+                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch >= NOW()", []);
+                if (!is_array($result)) {
+                    return [];
+                }
+                return $result;
+            }
+
             public function getMatch($idMatch) {
                 $param = [
                     ':idMatch' => $idMatch
@@ -141,9 +156,8 @@
                 }
             }
             
-            public function insertMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
+            public function insertMatch($dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
                 $param = [
-                    ':idMatch' => $idMatch,
                     ':dateMatch' => $dateMatch,
                     ':nomAdversaires' => $nomAdversaires,
                     ':lieuRencontre' => $lieuRencontre,
@@ -151,8 +165,8 @@
                     ':avoirGagnerMatch' => $avoirGagnerMatch
                 ];
                 return $this->createRequest(
-                    "INSERT INTO Matchs (IDMatch, dateMatch, nomAdversaires, lieuRencontre, domicileON, avoirGagnerMatch)
-                    VALUES (:idMatch, :dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatch)",
+                    "INSERT INTO Matchs (dateMatch, nomAdversaires, lieuRencontre, domicileON, avoirGagnerMatchON)
+                    VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatch)",
                     $param
                 );
             }

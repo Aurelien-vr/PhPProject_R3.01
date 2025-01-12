@@ -309,8 +309,8 @@ td > div{
     gap: 20px; 
 }
 
-.editPlayerButton {
-    background-color: #b4dbeb; /* Green */
+.editButton {
+    background-color: #b4dbeb;
     border: none;
     color: black;
     padding: 10px 20px;
@@ -324,6 +324,6 @@ td > div{
     transition: background-color 0.3s ease;
 }
 
-.editPlayerButton:hover {
+.editButton:hover {
     background-color: #7ca6b5;
 }
