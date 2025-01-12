@@ -189,9 +189,15 @@ table {
     border-collapse: collapse; 
 }
 
-th{
+th, td {
     padding: 2%;
     font-size: 16px;
+    text-align: center; /* Center horizontally */
+    vertical-align: middle; /* Center vertically */
+}
+
+th {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
 }
 
 td{
@@ -206,6 +212,11 @@ td > div{
 
 .hidden {
     display: none;
+}
+
+.hiddenStill {
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Subtle top border */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
 }
 
 /* camenbert */
@@ -296,4 +307,23 @@ td > div{
     padding-right: 8%;
     text-align: center;
     gap: 20px; 
+}
+
+.editPlayerButton {
+    background-color: #b4dbeb; /* Green */
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.editPlayerButton:hover {
+    background-color: #7ca6b5;
 }
