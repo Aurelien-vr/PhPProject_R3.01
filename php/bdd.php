@@ -42,25 +42,32 @@
                 $this->error = '';
                 try {
                     $stmt = $this->pdo->prepare($request);
-                    
-                    // Bind variables
-                    foreach ($param as $cle => $valeur) {
-                        $stmt->bindParam($cle, $valeur, PDO::PARAM_STR);
+            
+                    if ($param != null) {
+                        foreach ($param as $key => $value) {
+                            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+                        }
                     }
+            
                     $stmt->execute();
-
-                    // If it's a SELECT, return the results
+            
+                    // Déterminer si c'est un SELECT
                     if (stripos($request, 'SELECT') === 0) {
-                        return $stmt->fetch(PDO::FETCH_ASSOC);
+                        if (stripos($request, 'LIMIT 1') !== false || preg_match('/^SELECT .* FROM .* WHERE .*$/i', $request)) {
+                            return $stmt->fetch(PDO::FETCH_ASSOC);
+                        }
+                        return $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
-
-                    // For INSERT, UPDATE, DELETE, return true if successful
+            
+                    // Pour INSERT, UPDATE, DELETE, retourner true si succès
                     return true;
                 } catch (PDOException $e) {
                     $this->error = $e->getMessage();
                 }
+            
                 return null;
             }
+            
 
             // SELECT
             public function getPWD($log) {
@@ -74,6 +81,16 @@
                 return $this->createRequest(
                     "SELECT * FROM Joueurs ORDER BY nom, prenom", 
                     null
+                );
+            }
+
+            public function getJoueur($id) {
+                $param = [
+                    ':id' => $id
+                ];
+                return $this->createRequest(
+                    "SELECT * FROM Joueurs ORDER BY nom, prenom WHERE numlicence = :id", 
+                    $param
                 );
             }
 

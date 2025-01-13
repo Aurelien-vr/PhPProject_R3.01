@@ -60,6 +60,7 @@
                 </tbody>
             </table>
         </div>
+        <button onclick="window.location.href = '\ajout_joueurs.php';">INSERER JOUEUR</button>
 
     <script>
         function toggleRow(row) {
