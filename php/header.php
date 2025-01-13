@@ -22,6 +22,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             <div class="submenu">
                 <div><a href="match_passes.php">PASSÉS</a></div>
                 <div><a href="match_futurs.php">FUTURS</a></div>
+                <div><a href="ajout_match.php">NOUVEAU</a></div>
             </div>
         </div>
         <div class="nav"><a href="deconnection.php">SE DECONNECTER</a></div>

@@ -24,6 +24,7 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
     <title>Volley Manager</title>
 </head>
 <body>
+<button onclick="window.location.href = 'ajout_match.php';">AJOUTER MATCH</button>
 
 <div id="containerTable">
     <table>
@@ -52,6 +53,7 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
                         <form method='POST' action='ajoutScore.php' style='display:inline;'>
                             <button type='submit' class='editButton' name='match_id' value='$id'>Ajouter un score</button>
                         </form>
+                        <form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Edit match</button></form>
                       </td>";
                 echo "</tr>";
                 echo "<tr class='hidden hiddenStill'>";

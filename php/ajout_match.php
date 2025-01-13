@@ -11,82 +11,66 @@
 <?php
     include 'bdd.php'; 
     $db = new BDD();
-
-    // Variables par défaut
-    $idMatch = null;
     $dateMatch = null;
     $nomAdversaires = null;
     $lieuRencontre = null;
     $domicileON = null;
     $avoirGagnerMatchON = null;
-    $insert = true; // Par défaut, insérer un nouveau match
 
-    // Récupérer les données si un IDMatch est fourni en GET
+    $insert = true;
+
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['idMatch'])) {
-        $idMatch = $_GET['idMatch'];
+        $idMatch = $_GET['idMatch']; 
         $res = $db->getMatch($idMatch);
-
+        $insert = false;
+    
         if ($res) {
-            $insert = false; // Si un match est trouvé, on est en mode mise à jour
-            $dateMatch = $res['dateMatch'];
+            if (isset($res['dateMatch'])) {
+                // Formater la date en 'YYYY-MM-DDTHH:MM'
+                $dateMatch = substr($res['dateMatch'], 0, 16); // Extrait 'YYYY-MM-DD HH:MM'
+            }
+
+            // Assigner d'autres valeurs à partir de la réponse de la base de données
             $nomAdversaires = $res['nomAdversaires'];
             $lieuRencontre = $res['lieuRencontre'];
             $domicileON = $res['domicileON'];
-            $avoirGagnerMatchON = $res['avoirGagnerMatchON'];
         }
     }
 
-    // Gérer la soumission du formulaire
+    // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $idMatch = $_POST['idMatch'] ?? null;
         $dateMatch = $_POST['dateMatch'];
         $nomAdversaires = $_POST['nomAdversaires'];
         $lieuRencontre = $_POST['lieuRencontre'];
         $domicileON = isset($_POST['domicileON']) ? 1 : 0;
-        $avoirGagnerMatchON = isset($_POST['avoirGagnerMatchON']) ? 1 : 0;
 
         if ($insert) {
-            // Insertion d'un nouveau match
+            // Insertion du match
             $success = $db->insertMatch($dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatchON);
         } else {
-            // Mise à jour d'un match existant
+            // Mise à jour du match
             $success = $db->updateMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatchON);
-        }
-
-        // Afficher un message en fonction du succès ou de l'échec de l'opération
-        if (isset($success)) {
-            echo $success 
-                ? "<div class='success'>Le match a été ajouté/mis à jour avec succès !</div>"
-                : "<div class='error'>Une erreur est survenue : " . htmlspecialchars($db->getError()) . "</div>";
         }
     }
 ?>
 
 <form action="ajout_match.php" method="POST">
     <div id="ajoutMatch">
-        ID Match (automatique pour les nouveaux) : 
-        <input type="text" name="idMatch" class="formulaireInsertion" readonly 
-               value="<?php echo htmlspecialchars($idMatch); ?>"><br/>
-
         Date du Match* : 
-        <input type="date" name="dateMatch" class="formulaireInsertion" required 
-               value="<?php echo htmlspecialchars($dateMatch); ?>"><br/>
+        <input type="datetime-local" name="dateMatch" class="formulaireInsertion" required 
+                value="<?php echo htmlspecialchars($dateMatch); ?>"><br/>
 
         Nom des Adversaires* : 
-        <input type="text" name="nomAdversaires" class="formulaireInsertion" required maxlength="100" 
+        <input type="text" name="nomAdversaires" class="formulaireInsertion" required maxlength="50" 
                value="<?php echo htmlspecialchars($nomAdversaires); ?>"><br/>
 
         Lieu de Rencontre* : 
-        <input type="text" name="lieuRencontre" class="formulaireInsertion" required maxlength="100" 
+        <input type="text" name="lieuRencontre" class="formulaireInsertion" required maxlength="250" 
                value="<?php echo htmlspecialchars($lieuRencontre); ?>"><br/>
 
         Match à domicile : 
         <input type="checkbox" name="domicileON" 
                <?php echo ($domicileON == 1) ? 'checked' : ''; ?>><br/>
-
-        Victoire : 
-        <input type="checkbox" name="avoirGagnerMatchON" 
-               <?php echo ($avoirGagnerMatchON == 1) ? 'checked' : ''; ?>><br/>
 
         <input type="submit" id="submit" value="VALIDER" class="formulaireInsertion">
         <input type="reset" value="ANNULER" class="formulaireInsertion">

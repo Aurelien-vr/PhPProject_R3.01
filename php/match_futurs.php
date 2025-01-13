@@ -32,6 +32,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
     <title>Volley Manager</title>
 </head>
 <body>
+<button onclick="window.location.href = 'ajout_match.php';">AJOUTER MATCH</button>
 
 <div id="containerTable">
     <table>
@@ -64,6 +65,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                             <input type='hidden' name='delete_match_id' value='$id'>
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>
+                        <form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Edit match</button></form>
                       </td>";
                 echo "</tr>";
                 echo "<tr class='hidden hiddenStill'>";
@@ -75,6 +77,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
         </tbody>
     </table>
 </div>
+
 
 <script>
 function toggleRow(row) {
