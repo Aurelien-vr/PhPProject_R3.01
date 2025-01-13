@@ -83,6 +83,15 @@
                 return $result;
             }
 
+            public function getJoueur($id) {
+                $param = [
+                    ':id' => $id
+                ];
+                return $this->createRequest(
+                    "SELECT * FROM Joueurs  WHERE numLicence = :id ORDER BY nom, prenom", 
+                    $param
+                );
+            }
             
             public function getMatchsPassee() {
                 $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW()", []);

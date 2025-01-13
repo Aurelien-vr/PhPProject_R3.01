@@ -42,7 +42,7 @@
                     echo "<tr class='collapsible' onclick='toggleRow(this)'>";
                     echo "<td>{$id}</td>";
                     echo "<td>{$name}</td>";
-                    echo "<td><form method='POST' action='modifier_joueur.php'><button type='submit' class='editButton' name='player_id' value='{$id}'>Edit player</button></form></td>";
+                    echo "<td><form method='GET' action='ajout_joueurs.php'><button type='submit' class='editButton' name='numLicence' value='{$id}'>Edit player</button></form></td>";
                     echo "</tr>";
                     echo "<tr class='hidden hiddenStill'>";
                     echo "<td colspan='3'>{$details}</td>";
