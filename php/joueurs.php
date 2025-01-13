@@ -56,6 +56,9 @@
     </table>
 </div>
 
+<button onclick="window.location.href = 'ajout_joueurs.php';">AJOUTER JOUEUR</button>
+
+
 <script>
     function toggleRow(row) {
         const nextRow = row.nextElementSibling;
