@@ -1,6 +1,11 @@
 <?php
 require_once 'bdd.php';
-$db = new BDD(); 
+
+ob_start();
+include 'header.php';
+ob_end_flush();
+
+$db = new BDD();
 $matchPassees = $db->getMatchsPassee();
 $matchPasseesJson = json_encode($matchPassees);
 echo "<script>console.log('$matchPasseesJson');</script>";
@@ -20,7 +25,6 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
 </head>
 <body>
 
-<?php include 'header.php'; ?>
 <div id="containerTable">
     <table>
         <thead>
@@ -35,27 +39,25 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
         <?php
         if (is_array($matchPassees) && !empty($matchPassees)) {
             foreach ($matchPassees as $matchPassee) {
-                if (is_array($matchPassee)) {
-                    $id = htmlspecialchars($matchPassee['IDMatch']);
-                    $date = htmlspecialchars($matchPassee['dateMatch']);
-                    $adversaire = htmlspecialchars($matchPassee['nomAdversaires']);
-                    $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']). '<br>Domicile: ' . htmlspecialchars($matchPassee['domicileON']);
+                $id = htmlspecialchars($matchPassee['IDMatch']);
+                $date = htmlspecialchars($matchPassee['dateMatch']);
+                $adversaire = htmlspecialchars($matchPassee['nomAdversaires']);
+                $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']). '<br>Domicile: ' . htmlspecialchars($matchPassee['domicileON']);
 
-                    echo "<tr class='collapsible' onclick='toggleRow(this)'>";
-                    echo "<td>{$id}</td>";
-                    echo "<td>{$date}</td>";
-                    echo "<td>{$adversaire}</td>";
-                    echo "<td><form method='POST' action='modifierMatchPassee.php'><button type='submit' class='editButton' name='player_id' value='{$id}'>Edit player</button></form></td>";
-                    echo "</tr>";
-                    echo "<tr class='hidden hiddenStill'>";
-                    echo "<td colspan='4'>{$details}</td>";
-                    echo "</tr>";
-                } else {
-                    echo "<tr><td colspan='4'>Invalid match data: " . htmlspecialchars(json_encode($matchPassee)) . "</td></tr>";
-                }
+                echo "<tr class='collapsible' onclick='toggleRow(this)'>";
+                echo "<td>$id</td>";
+                echo "<td>$date</td>";
+                echo "<td>$adversaire</td>";
+                echo "<td>
+                        <form method='POST' action='ajoutScore.php' style='display:inline;'>
+                            <button type='submit' class='editButton' name='match_id' value='$id'>Ajouter un score</button>
+                        </form>
+                      </td>";
+                echo "</tr>";
+                echo "<tr class='hidden hiddenStill'>";
+                echo "<td colspan='4'>$details</td>";
+                echo "</tr>";
             }
-        } else {
-            echo "<tr><td colspan='4'>No past matches found.</td></tr>";
         }
         ?>
         </tbody>
@@ -63,15 +65,16 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
 </div>
 
 <script>
-    function toggleRow(row) {
-        const nextRow = row.nextElementSibling;
-
-        if (nextRow && nextRow.classList.contains('hidden')) {
-            nextRow.classList.remove('hidden');
-        } else if (nextRow) {
-            nextRow.classList.add('hidden');
-        }
+function toggleRow(row) {
+    var nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.classList.contains('hiddenStill')) {
+        nextRow.classList.toggle('hidden');
     }
+}
+
+function confirmDelete() {
+    return confirm('Are you sure you want to delete this match?');
+}
 </script>
 
 </body>

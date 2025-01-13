@@ -41,30 +41,30 @@
                 $this->error = '';
                 try {
                     $stmt = $this->pdo->prepare($request);
-            
+
                     if ($param != null) {
                         foreach ($param as $key => $value) {
                             $stmt->bindValue($key, $value, PDO::PARAM_STR);
                         }
                     }
-            
+
                     $stmt->execute();
-            
-                    // Déterminer si c'est un SELECT
+
+                    // Determine if it's a SELECT
                     if (stripos($request, 'SELECT') === 0) {
-                        if (stripos($request, 'LIMIT 1') !== false || preg_match('/^SELECT .* FROM .* WHERE .*$/i', $request)) {
-                            return $stmt->fetch(PDO::FETCH_ASSOC);
+                        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        if (count($results) == 1) {
+                            return $results[0]; // Return single result if only one row is found
                         }
-                        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        return $results; // Return array of results if multiple rows are found
                     }
-            
-                    // Pour INSERT, UPDATE, DELETE, retourner true si succès
+
+                    // For INSERT, UPDATE, DELETE, return true if success
                     return true;
                 } catch (PDOException $e) {
                     $this->error = $e->getMessage();
+                    return false;
                 }
-            
-                return null;
             }
 
             // SELECT   
@@ -83,7 +83,7 @@
                 return $result;
             }
 
-
+            
             public function getMatchsPassee() {
                 $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW()", []);
                 if (!is_array($result)) {
@@ -100,14 +100,23 @@
                 return $result;
             }
 
+            public function getSets() {
+                $result = $this->createRequest("SELECT * FROM Sets", []);
+                return (!is_array($result)) ? [] : $result; 
+            }   
+
+
             public function getMatch($idMatch) {
                 $param = [
                     ':idMatch' => $idMatch
                 ];
-                return $this->createRequest(
+                $match = $this->createRequest(
                     "SELECT * FROM Matchs WHERE IDMatch = :idMatch", 
                     $param
                 );
+                // Print match details to the console
+                echo "<script>console.log('Match Details: " . json_encode($match) . "');</script>";
+                return $match;
             }
 
             public function getSet($idSet) {
@@ -129,6 +138,25 @@
                     "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
                     $param
                 );
+            }
+
+            public function hasSet($idMatch) {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                $result = $this->createRequest(
+                    "SELECT COUNT(*) as count FROM Sets WHERE IDMatch = :idMatch", 
+                    $param
+                );
+                return $result['count'] > 0;
+            }
+
+            public function getAllMatches() {
+                $result = $this->createRequest("SELECT * FROM Matchs", []);
+                if (!is_array($result)) {
+                    return [];
+                }
+                return $result;
             }
             
             // INSERT
@@ -156,36 +184,37 @@
                 }
             }
             
-            public function insertMatch($dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
+            public function insertMatch($dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatchON) {
                 $param = [
                     ':dateMatch' => $dateMatch,
                     ':nomAdversaires' => $nomAdversaires,
                     ':lieuRencontre' => $lieuRencontre,
                     ':domicileON' => $domicileON,
-                    ':avoirGagnerMatch' => $avoirGagnerMatch
+                    ':avoirGagnerMatchON' => $avoirGagnerMatchON
                 ];
                 return $this->createRequest(
                     "INSERT INTO Matchs (dateMatch, nomAdversaires, lieuRencontre, domicileON, avoirGagnerMatchON)
-                    VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatch)",
+                    VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatchON)",
                     $param
                 );
             }
             
-            public function insertSet($idSet, $scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch) {
+            public function insertSet($scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch) {
                 $param = [
-                    ':idSet' => $idSet,
                     ':scoreEquipe' => $scoreEquipe,
                     ':scoreAdversaire' => $scoreAdversaire,
                     ':tieBreak' => $tieBreak,
                     ':idMatch' => $idMatch
                 ];
                 return $this->createRequest(
-                    "INSERT INTO Sets (IDSet, scoreEquipe, scoreAdversaire, tieBreak, IDMatch)
-                    VALUES (:idSet, :scoreEquipe, :scoreAdversaire, :tieBreak, :idMatch)",
+                    "INSERT INTO Sets (scoreEquipe, scoreAdversaire, tieBreak, IDMatch)
+                    VALUES (:scoreEquipe, :scoreAdversaire, :tieBreak, :idMatch)",
                     $param
                 );
             }
             
+            
+
             public function insertUtilisateur($login, $motDePasse) {
                 $param = [
                     ':login' => $login,
@@ -234,19 +263,19 @@
                 );
             }
 
-            public function updateMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatch) {
+            public function updateMatch($idMatch, $dateMatch, $nomAdversaires, $lieuRencontre, $domicileON, $avoirGagnerMatchON) {
                 $param = [
                     ':idMatch' => $idMatch,
                     ':dateMatch' => $dateMatch,
                     ':nomAdversaires' => $nomAdversaires,
                     ':lieuRencontre' => $lieuRencontre,
                     ':domicileON' => $domicileON,
-                    ':avoirGagnerMatch' => $avoirGagnerMatch
+                    ':avoirGagnerMatchON' => $avoirGagnerMatchON
                 ];
                 return $this->createRequest(
                     "UPDATE Matchs 
                      SET dateMatch = :dateMatch, nomAdversaires = :nomAdversaires, lieuRencontre = :lieuRencontre, 
-                         domicileON = :domicileON, avoirGagnerMatch = :avoirGagnerMatch
+s                         domicileON = :domicileON, avoirGagnerMatchON = :avoirGagnerMatchON
                      WHERE IDMatch = :idMatch",
                     $param
                 );
@@ -282,6 +311,19 @@
                     "UPDATE EtreSelectionner 
                      SET titulaireON = :titulaireON, poste = :poste, notationJoueur = :notationJoueur, nbRemplacements = :nbRemplacements
                      WHERE numLicence = :numLicence AND IDMatch = :idMatch",
+                    $param
+                );
+            }
+
+            public function updateAvoirGagnerMatchON($idMatch, $avoirGagnerMatchON) {
+                $param = [
+                    ':idMatch' => $idMatch,
+                    ':avoirGagnerMatchON' => $avoirGagnerMatchON
+                ];
+                return $this->createRequest(
+                    "UPDATE Matchs 
+                     SET avoirGagnerMatchON = :avoirGagnerMatchON
+                     WHERE IDMatch = :idMatch",
                     $param
                 );
             }
@@ -327,8 +369,10 @@
                     $param
                 );
             }
-            
-            
+
+            public function deleteAllMatches() {
+                return $this->createRequest("DELETE FROM Matchs", []);
+            }
         }
     ?>
     </body>

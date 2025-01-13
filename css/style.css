@@ -1,19 +1,38 @@
-body{
-    font-family:'Lexend', sans-serif;
+body {
+    font-family: 'Lexend', sans-serif;
     margin-left: 0;
-    margin-top: 0; 
-    padding: 0; 
-    overflow: hidden;
-    height: 100vh; 
-    width: 100vw;  
+    margin-top: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
     background-image: url("../img/image.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     justify-content: center;
+    overflow: auto;
+    /* Ensure body is scrollable */
 }
 
-.h1, h2{
+#containerTable {
+    max-height: 90vh;
+    /* Set maximum height */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 12px;
+    backdrop-filter: blur(13px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(215, 183, 154, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.h1,
+h2 {
     font-family: 'Lexend', sans-serif;
     width: 100vw;
     display: flex;
@@ -29,32 +48,35 @@ body{
     border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
-.acceuilPCdiv{
+.acceuilPCdiv {
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
-.loginPannel{
+.loginPannel {
     display: flex;
     flex-direction: column;
     background-color: #143649;
     width: 35vw;
     height: 100vh;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
 }
-.loginPannel > *{
+
+.loginPannel>* {
     scale: 1.4;
 }
-#loginTitle{
+
+#loginTitle {
     color: #F1D35B;
     margin-top: -17vh;
     margin-bottom: 15vh;
 }
-#loginContainer{
+
+#loginContainer {
     display: flex;
     flex-direction: column;
     width: 30vh;
@@ -68,45 +90,54 @@ body{
     align-content: center;
     scale: 1.1;
 }
-#loginContainer > *{
+
+#loginContainer>* {
     margin: 1vh;
 }
-.fieldLogin{
+
+.fieldLogin {
     /*margin: auto;*/
     margin-bottom: 1vh !important;
     font-family: inherit;
 }
-input{
+
+input {
     border-radius: 6px;
     height: 4vh;
     box-shadow: none;
     outline: none;
     border: none;
 }
-#userNameId{
+
+#userNameId {
     margin-top: 4vh;
 }
-#submit{
+
+#submit {
     margin-bottom: 3vh;
     color: #F1D35B;
     background-color: #20627B;
-    border-radius: 100px;    
-    font-size:unset ;
+    border-radius: 100px;
+    font-size: unset;
     font-size: 80%;
     scale: 1.2;
 }
-#submit:hover{
+
+#submit:hover {
     outline: 1px solid #F1D35B;
 }
+
 #messageErreur {
     text-align: center;
     font-weight: bold;
     word-wrap: break-word;
     z-index: 2400;
 }
+
 .success {
     color: rgb(81, 163, 81);
 }
+
 .error {
     color: red;
 }
@@ -124,32 +155,35 @@ nav {
     gap: 20px;
 }
 
-.nav, .navs {
-    position: relative; 
+.nav,
+.navs {
+    position: relative;
 }
 
-.nav a, .navs > a {
+.nav a,
+.navs>a {
     color: white;
     text-decoration: none;
     padding: 10px 20px;
     display: block;
 }
 
-.nav a:hover, .navs > a:hover {
+.nav a:hover,
+.navs>a:hover {
     background-color: #39778d;
 }
 
 .submenu {
     position: absolute;
-    top: 100%; 
-    left: 50%; 
+    top: 100%;
+    left: 50%;
     transform: translateX(-50%);
     background-color: #356475;
-    display: none; 
+    display: none;
     padding: 10px 0;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    z-index: 100; 
+    z-index: 100;
 }
 
 .submenu div {
@@ -170,44 +204,32 @@ nav {
     display: block;
 }
 
-#containerTable{
-    display: flex;
-    justify-content: center;
-    margin: 20px auto;
-    margin-left: 20%;
-    margin-right: 20%;
-    border-radius: 12px;
-    backdrop-filter: blur(13px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(215, 183, 154, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.125);
-}
-
 table {
     width: 100%;
     table-layout: fixed;
-    border-collapse: collapse; 
+    border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 2%;
     font-size: 16px;
-    text-align: center; /* Center horizontally */
-    vertical-align: middle; /* Center vertically */
+    text-align: center;
+    vertical-align: middle;
 }
 
 th {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-td{
+td {
     align-items: center;
     padding: 1%;
 }
 
-td > div{
+td>div {
     border-top: 1px solid hsla(0, 0%, 100%, 0.274);
-    border-bottom: 1px solid hsla(0, 0%, 100%, 0.274)
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.274);
 }
 
 .hidden {
@@ -215,8 +237,8 @@ td > div{
 }
 
 .hiddenStill {
-    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Subtle top border */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* camenbert */
@@ -242,9 +264,17 @@ td > div{
     margin-right: 10px;
 }
 
-.green { background-color: #28a745; }
-.red { background-color: #dc3545; }
-.gray { background-color: #6c757d; }
+.green {
+    background-color: #28a745;
+}
+
+.red {
+    background-color: #dc3545;
+}
+
+.gray {
+    background-color: #6c757d;
+}
 
 /* podium */
 .podium {
@@ -279,7 +309,8 @@ td > div{
 }
 
 .place.third {
-    background-color: #cd7f32; /* Couleur bronze */
+    background-color: #cd7f32;
+    /* Couleur bronze */
     color: black;
     font-weight: bold;
 }
@@ -289,7 +320,7 @@ td > div{
     margin-right: 10px;
 }
 
-#divPc{
+#divPc {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -306,7 +337,7 @@ td > div{
     padding-left: 8%;
     padding-right: 8%;
     text-align: center;
-    gap: 20px; 
+    gap: 20px;
 }
 
 .editButton {
@@ -326,4 +357,23 @@ td > div{
 
 .editButton:hover {
     background-color: #7ca6b5;
+}
+
+.deleteButton {
+    background-color: #e74c3c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+    background-color: #c0392b;
 }

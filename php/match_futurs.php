@@ -1,10 +1,27 @@
 <?php
 require_once 'bdd.php';
-require_once 'insert_sample_matches.php'; // Corrected file path
-$db = new BDD(); 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_match_id'])) {
+    $idMatch = $_POST['delete_match_id'];
+    $db = new BDD();
+    $db->deleteMatch($idMatch);
+    header("Location: match_futurs.php");
+    exit();
+}
+
+ob_start();
+include 'header.php';
+ob_end_flush();
+
+$db = new BDD();
 $matchFutres = $db->getMatchsFutur();
 $matchFutresJson = json_encode($matchFutres);
 echo "<script>console.log('$matchFutresJson');</script>";
+
+// Ensure $matchFutres is an array of arrays
+if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
+    $matchFutres = [$matchFutres];
+}
 ?>
 
 <html>
@@ -16,7 +33,6 @@ echo "<script>console.log('$matchFutresJson');</script>";
 </head>
 <body>
 
-<?php include 'header.php'; ?>
 <div id="containerTable">
     <table>
         <thead>
@@ -33,25 +49,45 @@ echo "<script>console.log('$matchFutresJson');</script>";
             foreach ($matchFutres as $matchFutur) {
                 $id = htmlspecialchars($matchFutur['IDMatch']);
                 $date = htmlspecialchars($matchFutur['dateMatch']);
-                $adversaire = htmlspecialchars($matchFutur['nomAdversaire']);
+                $adversaire = htmlspecialchars($matchFutur['nomAdversaires']); // Corrected key
                 $details = 'Lieu: ' . htmlspecialchars($matchFutur['lieuRencontre']). '<br>Domicile: ' . htmlspecialchars($matchFutur['domicileON']);
 
                 echo "<tr class='collapsible' onclick='toggleRow(this)'>";
-                echo "<td>{$id}</td>";
-                echo "<td>{$date}</td>";
-                echo "<td>{$adversaire}</td>";
-                echo "<td><form method='POST' action='modifierMatchFutur.php'><button type='submit' class='editButton' name='player_id' value='{$id}'>Edit player</button></form></td>";
+                echo "<td>$id</td>";
+                echo "<td>$date</td>";
+                echo "<td>$adversaire</td>";
+                echo "<td>
+                        <form method='POST' action='ajouterJoueurMatch.php' style='display:inline;'>
+                            <button type='submit' class='editButton' name='match_id' value='$id'>Ajout de joueurs</button>
+                        </form>
+                        <form method='POST' style='display:inline;' onsubmit='return confirmDelete();'>
+                            <input type='hidden' name='delete_match_id' value='$id'>
+                            <button type='submit' class='deleteButton'>Delete</button>
+                        </form>
+                      </td>";
                 echo "</tr>";
                 echo "<tr class='hidden hiddenStill'>";
-                echo "<td colspan='3'>{$details}</td>";
+                echo "<td colspan='4'>$details</td>";
                 echo "</tr>";
             }
-        } else {
-            echo "<tr><td colspan='3'>No future matches found.</td></tr>";
         }
         ?>
         </tbody>
     </table>
 </div>
+
+<script>
+function toggleRow(row) {
+    var nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.classList.contains('hiddenStill')) {
+        nextRow.classList.toggle('hidden');
+    }
+}
+
+function confirmDelete() {
+    return confirm('Are you sure you want to delete this match?');
+}
+</script>
+
 </body>
 </html>

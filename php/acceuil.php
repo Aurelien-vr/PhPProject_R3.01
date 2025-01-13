@@ -18,20 +18,24 @@
 <body>
     <?php
        include 'bdd.php';
-       
        $bdd = new BDD();
+
 
        // Calcul des pourcentages
        $query = "SELECT 
-                   SUM(CASE WHEN avoirGagnerMatch = 1 THEN 1 ELSE 0 END) AS gagnes,
-                   SUM(CASE WHEN avoirGagnerMatch = 0 THEN 1 ELSE 0 END) AS perdus,
-                   SUM(CASE WHEN avoirGagnerMatch IS NULL THEN 1 ELSE 0 END) AS non_renseignes
+                   SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
+                   SUM(CASE WHEN avoirGagnerMatchON = 0 THEN 1 ELSE 0 END) AS perdus,
+                   SUM(CASE WHEN avoirGagnerMatchON IS NULL THEN 1 ELSE 0 END) AS non_renseignes
                  FROM Matchs WHERE DATE(dateMatch) <= CURDATE()";
        $stats = $bdd->createRequest($query, []);
+        
        $gagnes = $stats['gagnes'] ?? 0;
        $perdus = $stats['perdus'] ?? 0;
        $non_renseignes = $stats['non_renseignes'] ?? 0;
        $total = $gagnes + $perdus + $non_renseignes;
+       
+       // Print match statistics to the console
+       echo "<script>console.log('Matchs Gagnés: $gagnes, Matchs Perdus: $perdus, Non Renseignés: $non_renseignes, Total: $total');</script>";
        
        if ($total > 0) {
            $pourcentage_gagnes = ($gagnes / $total) * 100;
@@ -55,14 +59,14 @@
 
         $query = "
         SELECT 
-            joueur.nomJoueur AS joueur,
-            ROUND(AVG(note), 2) AS moyenne_note
+            joueur.nom AS joueur,
+            ROUND(AVG(nj.note), 2) AS moyenne_note
         FROM 
             NotesJoueur nj
         JOIN 
-            Joueurs joueur ON nj.idJoueur = joueur.idJoueur
+            Joueurs joueur ON nj.idJoueur = joueur.numLicence
         GROUP BY 
-            joueur.nomJoueur
+            joueur.nom
         ORDER BY 
             moyenne_note DESC
         LIMIT 3;
@@ -71,6 +75,11 @@
         $topJoueurs = $bdd->createRequest($query, []);
 
         include 'header.php'; 
+       
+       // Call getMatch and print the match details to the console
+       
+       $matchDetails = $bdd->getMatchsPassee();
+       echo "<script>console.log('Match Details: " . json_encode($matchDetails) . "');</script>";
     ?>
 
 <div class="acceuilPCdiv">
