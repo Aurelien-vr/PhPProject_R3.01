@@ -241,6 +241,19 @@ td>div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.match-gagne {
+    background-color: rgba(0, 255, 0, 0.2); /* Vert transparent */
+}
+
+.match-perdu {
+    background-color: rgba(255, 0, 0, 0.2); /* Rouge transparent */
+}
+
+.match-inconnu {
+    background-color: rgba(128, 128, 128, 0.2); /* Gris transparent */
+}
+
+
 /* camenbert */
 
 .legend {

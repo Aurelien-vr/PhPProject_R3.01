@@ -65,7 +65,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                             <input type='hidden' name='delete_match_id' value='$id'>
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>
-                        <form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Edit match</button></form>
+                        <form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Modifier le match</button></form>
                       </td>";
                 echo "</tr>";
                 echo "<tr class='hidden hiddenStill'>";

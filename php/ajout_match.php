@@ -9,7 +9,7 @@
 
 <?php include 'header.php'; ?>
 <?php
-    include 'bdd.php'; 
+    require 'bdd.php'; 
     $db = new BDD();
     $dateMatch = null;
     $nomAdversaires = null;

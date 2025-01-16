@@ -43,24 +43,37 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
                 $id = htmlspecialchars($matchPassee['IDMatch']);
                 $date = htmlspecialchars($matchPassee['dateMatch']);
                 $adversaire = htmlspecialchars($matchPassee['nomAdversaires']);
-                $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']). '<br>Domicile: ' . htmlspecialchars($matchPassee['domicileON']);
-
-                echo "<tr class='collapsible' onclick='toggleRow(this)'>";
+                $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']) . '<br>Domicile: ' . htmlspecialchars($matchPassee['domicileON']);
+        
+                if (is_null($matchPassee['avoirGagnerMatchON'])) {
+                    $resultClass = 'match-inconnu'; // Gris pour les valeurs nulles
+                } elseif ($matchPassee['avoirGagnerMatchON'] == 1) {
+                    $resultClass = 'match-gagne'; // Vert pour gagné
+                } else {
+                    $resultClass = 'match-perdu'; // Rouge pour perdu
+                }
+        
+                echo "<tr class='collapsible $resultClass' onclick='toggleRow(this)'>";
                 echo "<td>$id</td>";
                 echo "<td>$date</td>";
-                echo "<td>$adversaire</td>";
-                echo "<td>
-                        <form method='POST' action='ajoutScore.php' style='display:inline;'>
-                            <button type='submit' class='editButton' name='match_id' value='$id'>Ajouter un score</button>
-                        </form>
-                        <form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Edit match</button></form>
-                      </td>";
-                echo "</tr>";
+                echo "<td>$adversaire</td><td>";
+                
+                echo "<form method='POST' action='ajout_score.php' style='display:inline;'>
+                            <button type='submit' class='editButton' name='match_id' value='$id'>
+                            ";
+                if (is_null($matchPassee['avoirGagnerMatchON'])) {
+                    echo "Ajouter un score";
+                } else {
+                    echo "Modifier le score";
+                }
+                echo "</button></form><form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Modifier match</button></form>";
+                echo "</td></tr>";
                 echo "<tr class='hidden hiddenStill'>";
                 echo "<td colspan='4'>$details</td>";
                 echo "</tr>";
             }
         }
+             
         ?>
         </tbody>
     </table>

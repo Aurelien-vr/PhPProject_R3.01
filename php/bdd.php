@@ -94,7 +94,7 @@
             }
             
             public function getMatchsPassee() {
-                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW()", []);
+                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW() ORDER BY dateMatch DESC", []);
                 if (!is_array($result)) {
                     return [];
                 }
@@ -102,15 +102,18 @@
             }
 
             public function getMatchsFutur() {
-                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch >= NOW()", []);
+                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch >= NOW() ORDER BY dateMatch", []);
                 if (!is_array($result)) {
                     return [];
                 }
                 return $result;
             }
 
-            public function getSets() {
-                $result = $this->createRequest("SELECT * FROM Sets", []);
+            public function getSets($idMatch) {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                $result = $this->createRequest("SELECT * FROM Sets WHERE idMatch = :idMatch ORDER BY idSet", $param);
                 return (!is_array($result)) ? [] : $result; 
             }   
 
@@ -377,10 +380,6 @@ s                         domicileON = :domicileON, avoirGagnerMatchON = :avoirG
                     "DELETE FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
                     $param
                 );
-            }
-
-            public function deleteAllMatches() {
-                return $this->createRequest("DELETE FROM Matchs", []);
             }
         }
     ?>
