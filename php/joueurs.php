@@ -22,7 +22,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Numero de Licence</th>
                 <th>Name</th>
                 <th>Action</th>
             </tr>

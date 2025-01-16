@@ -83,6 +83,15 @@
                 return $result;
             }
 
+            public function getJoueursActif() {
+                $result = $this->createRequest("SELECT * FROM Joueurs WHERE statutJoueur = 'Actif' ORDER BY nom, prenom", []);
+                if (!is_array($result) || (isset($result['numLicence']))) {
+                    // Si un seul joueur est retourné, encapsulez-le dans un tableau
+                    $result = [$result];
+                }
+                return $result;
+            }
+            
             public function getJoueur($id) {
                 $param = [
                     ':id' => $id
@@ -92,6 +101,55 @@
                     $param
                 );
             }
+
+            public function getJoueursPosteSelect($idMatch)
+            {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                $result = $this->createRequest(
+                    "SELECT numLicence, poste, titulaireON FROM EtreSelectionner WHERE idMatch = :idMatch",
+                    $param
+                );
+            
+                if (empty($result)) {
+                    return [];
+                }
+            
+                if (isset($result['numLicence'])) {
+                    return [$result]; // Encapsule la ligne unique dans un tableau
+                }
+            
+                return $result;
+            }
+            
+
+            public function getAVGNotationJoueur($idJoueur){
+                $result = $this->createRequest(
+                    "SELECT AVG(notationJoueur) as avgNotation FROM EtreSelectionner WHERE idJoueur = :idJoueur",
+                    [':idJoueur' => $idJoueur]
+                );
+
+                return $result ? $result[0]['avgNotation'] : null; // Assure un accès correct à la valeur
+            }
+
+
+            public function getPosteFavJoueur($idJoueur){
+                $result = $this->createRequest(
+                    "SELECT poste, COUNT(poste) as countPoste
+                    FROM EtreSelectionner
+                    WHERE idJoueur = :idJoueur
+                    GROUP BY poste
+                    ORDER BY countPoste DESC
+                    LIMIT 1",
+                    [':idJoueur' => $idJoueur]
+                );
+
+                return $result ? $result[0]['poste'] : null; // Retourne le poste favori ou null s'il n'y a pas de résultat
+            }
+
+            
+            
             
             public function getMatchsPassee() {
                 $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW() ORDER BY dateMatch DESC", []);

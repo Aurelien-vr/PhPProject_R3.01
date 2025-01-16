@@ -19,12 +19,13 @@
     $poids = null;
     $statutJoueur = null;
     $commentaire = null;
-    $update = false;
+    $insert = true;
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['numLicence'])) {
         $numLicence = $_GET['numLicence']; 
         $res = $db->getJoueur($numLicence);
-        $insert = true;
+        $insert = false;
+        echo 'caca';
     
         if ($res) {
             if (isset($res['nom'])) {
@@ -54,8 +55,7 @@
         $poids = !empty($_POST['poids']) ? $_POST['poids'] : null;
         $statutJoueur = $_POST['statutJoueur'];
         $commentaire = !empty($_POST['commentaire']) ? $_POST['commentaire'] : null;
-    
-        if ($insert) {
+        if (isset($insert) && $insert) {
             // Vérifier si le numéro de licence existe déjà
             $existingJoueur = $db->getJoueur($numLicence);
             if ($existingJoueur) {
