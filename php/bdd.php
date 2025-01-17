@@ -122,6 +122,26 @@
             
                 return $result;
             }
+
+            public function getJoueursNotations($idMatch){
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
+                $result = $this->createRequest(
+                    "SELECT p.numLicence, nom, prenom, poste, titulaireON, notationJoueur, nbRemplacements FROM EtreSelectionner e JOIN Joueurs j ON e.idJoueur = p.idJoueur WHERE idMatch = :idMatch",
+                    $param
+                );
+
+                if (empty($result)) {
+                    return [];
+                }
+            
+                if (isset($result['numLicence'])) {
+                    return [$result];
+                }
+            
+                return $result;
+            }
             
 
             public function getAVGNotationJoueur($idJoueur){

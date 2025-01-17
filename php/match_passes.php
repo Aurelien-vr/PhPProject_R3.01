@@ -66,6 +66,9 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
                 } else {
                     echo "Modifier le score";
                 }
+                echo "</button></form><form method='POST' action='evaluer_joueur.php' style='display:inline;'>
+                            <button type='submit' class='editButton' name='idMatch' value='$id'>
+                            Noter les joueurs";
                 echo "</button></form><form method='GET' action='ajout_match.php'><button type='submit' class='editButton' name='idMatch' value='{$id}'>Modifier match</button></form>";
                 echo "</td></tr>";
                 echo "<tr class='hidden hiddenStill'>";

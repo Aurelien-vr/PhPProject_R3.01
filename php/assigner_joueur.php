@@ -94,11 +94,7 @@
                 $posteJoueur = $select ? htmlspecialchars($selected[$id]['poste']) : '';
                 $titulaireON = $select ? (bool)$selected[$id]['titulaireON'] : false;
 
-                $details = 'Date de naissance: ' . htmlspecialchars($joueur['dateNaissance']) .
-                    '<br>Taille: ' . htmlspecialchars($joueur['taille']) .
-                    '<br>Poids: ' . htmlspecialchars($joueur['poids']) .
-                    '<br>Commentaire: ' . htmlspecialchars($joueur['commentaire']);
-        ?>
+            ?>
             <tr class="collapsible">
                 <td><?= $id ?></td>
                 <td><?= $name ?></td>
