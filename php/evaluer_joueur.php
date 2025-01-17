@@ -10,40 +10,39 @@
 
 <?php include 'header.php'; ?>
 <?php
-    require 'bdd.php';
-    $db = new BDD();
+require 'bdd.php';
+$db = new BDD();
 
-    // Initialisation des variables
-    $idMatch = null;
-    $joueurs = [];
+// Initialisation des variables
+$idMatch = null;
+$joueurs = [];
 
-    // Vérification si le formulaire a été soumis
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idMatch'])) {
-        $idMatch = $_POST['idMatch'];
-        $joueurs = $db->getJoueursNotations($idMatch);
+// Vérification si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idMatch'])) {
+    $idMatch = $_POST['idMatch'];
+    $joueurs = $db->getJoueursNotations($idMatch);
 
-        // Mise à jour des données des joueurs
-        if (is_array($joueurs) && !empty($joueurs)) {
-            foreach ($joueurs as $joueur) {
-                $numLicence = $joueur['numLicence'];
-                
-                $notation = $_POST['notation'][$numLicence] ?? null;
+    // Mise à jour des données des joueurs
+    if (is_array($joueurs) && !empty($joueurs)) {
+        foreach ($joueurs as $joueur) {
+            $numLicence = $joueur['numLicence'];
+            $notation = $_POST['notation'][$numLicence] ?? null;
 
-                // Mise à jour uniquement si des valeurs sont disponibles
-                if (isset($notation)) {
-                    $db->updateEtreSelectionner(
-                        $numLicence,
-                        $idMatch,
-                        $joueur['titulaireON'],
-                        $joueur['poste'],
-                        $notation
-                    );
-                }
+            // Mise à jour uniquement si des valeurs sont disponibles
+            if (isset($notation)) {
+                $db->updateEtreSelectionner(
+                    $numLicence,
+                    $idMatch,
+                    $joueur['titulaireON'],
+                    $joueur['poste'],
+                    $notation
+                );
             }
         }
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        echo "<div class='error'>ID de match non spécifié.</div>";
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "<div class='error'>ID de match non spécifié.</div>";
+}
 ?>
 
 <div id="containerTable">
@@ -64,6 +63,7 @@
             <tbody>
             <?php
             $joueurs = $db->getJoueursNotations($idMatch);
+
             if (is_array($joueurs) && !empty($joueurs)) {
                 foreach ($joueurs as $joueur) {
                     $id = htmlspecialchars($joueur['numLicence']);
@@ -77,7 +77,8 @@
                     <td><?= $name ?></td>
                     <td><?= $poste ?></td>
                     <td><?= $titulaire ?></td>
-                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="10"></td>                </tr>
+                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="10"></td>
+                </tr>
             <?php
                 }
             } else {

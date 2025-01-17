@@ -128,7 +128,7 @@
                     ':idMatch' => $idMatch
                 ];
                 $result = $this->createRequest(
-                    "SELECT p.numLicence, nom, prenom, poste, titulaireON, notationJoueur FROM EtreSelectionner e JOIN Joueurs j ON e.idJoueur = p.idJoueur WHERE idMatch = :idMatch",
+                    "SELECT Joueurs.numLicence, nom, prenom, poste, titulaireON, notationJoueur FROM EtreSelectionner JOIN Joueurs ON EtreSelectionner.numLicence = Joueurs.numLicence WHERE idMatch = :idMatch",
                     $param
                 );
 
