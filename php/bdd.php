@@ -142,32 +142,143 @@
             
                 return $result;
             }
+
+            public function getPourcentagesMatchs(){
+                $query = "SELECT 
+                        SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
+                        SUM(CASE WHEN avoirGagnerMatchON = 0 THEN 1 ELSE 0 END) AS perdus,
+                        SUM(CASE WHEN avoirGagnerMatchON IS NULL THEN 1 ELSE 0 END) AS non_renseignes
+                    FROM Matchs WHERE etreMatchPasseON = 1";
+                $result = $this->createRequest($query, []);
+                return $result;
+            }
+            
+            public function getPourcentagesMatchsGagnerJoueur($idJoueur){
+                $query = "SELECT 
+                        SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
+                        SUM(CASE WHEN avoirGagnerMatchON = 0 OR avoirGagnerMatchON IS NULL THEN 1 ELSE 0 END) AS autre
+                        FROM Matchs 
+                        JOIN EtreSelectionner ON Matchs.idMatch = EtreSelectionner.idMatch
+                        WHERE etreMatchPasseON = 1
+                        AND numLicence = :idJoueur";
+                $result = $this->createRequest($query, [':idJoueur'=> $idJoueur]);
+                $gagner = $result['gagnes'] ?? 0;
+                $coef = $gagner + $result['autre'] ?? 0;
+                if($coef!=0){
+                    $total = $gagner / ($gagner + $result['autre'] ?? 0) * 100;
+                    return round($total, 2);
+                }
+                return 'N/A';
+            }
             
 
-            public function getAVGNotationJoueur($idJoueur){
+            public function getAVGNotationJoueur($idJoueur) {
                 $result = $this->createRequest(
-                    "SELECT AVG(notationJoueur) as avgNotation FROM EtreSelectionner WHERE idJoueur = :idJoueur",
+                    "SELECT AVG(notationJoueur) as avgNotation FROM EtreSelectionner WHERE numLicence = :idJoueur",
                     [':idJoueur' => $idJoueur]
                 );
-
-                return $result ? $result[0]['avgNotation'] : null; // Assure un accès correct à la valeur
+            
+                if ($result && isset($result['avgNotation'])) {
+                    // Arrondir à une décimale
+                    $avgNotation = round($result['avgNotation'], 1);
+            
+                    // Si la notation arrondie est un entier (par exemple 5.0), la convertir en entier
+                    if (intval($avgNotation) == $avgNotation) {
+                        return intval($avgNotation); // Retourne un entier si la notation est un entier
+                    }
+                    
+                    return $avgNotation; // Sinon, retourne la notation arrondie à 1 décimale
+                } else {
+                    return 'N/A'; // Retourne null si aucun résultat n'est trouvé
+                }
             }
+            
+            
 
-
-            public function getPosteFavJoueur($idJoueur){
+            public function getPosteFavJoueur($idJoueur) {
                 $result = $this->createRequest(
                     "SELECT poste, COUNT(poste) as countPoste
                     FROM EtreSelectionner
-                    WHERE idJoueur = :idJoueur
+                    WHERE numLicence = :idJoueur
                     GROUP BY poste
                     ORDER BY countPoste DESC
                     LIMIT 1",
                     [':idJoueur' => $idJoueur]
                 );
-
-                return $result ? $result[0]['poste'] : null; // Retourne le poste favori ou null s'il n'y a pas de résultat
+            
+                if ($result && isset($result['poste'])) {
+                    return $result['poste']; // Retourne le poste favori
+                } else {
+                    return 'N/A'; // Retourne null si aucun poste n'est trouvé
+                }
             }
 
+            public function getNbTitularisation($numLicence){
+                $result = $this->createRequest(
+                    "SELECT COUNT(idMatch) as a
+                    FROM EtreSelectionner
+                    WHERE numLicence = :idJoueur
+                    AND titulaireON = '1'",
+                    [':idJoueur' => $numLicence]
+                );
+                return $result['a'];
+            }
+            
+            public function getNbRemplacements($numLicence){
+                $result = $this->createRequest(
+                    "SELECT COUNT(idMatch) as a
+                    FROM EtreSelectionner
+                    WHERE numLicence = :idJoueur
+                    AND titulaireON = '0'",
+                    [':idJoueur' => $numLicence]
+                );
+                return $result['a'];
+            }
+            
+            public function getNbMatchConsecutif($numLicence) {
+                // Récupère les matchs passés en ordre décroissant (du plus récent au plus ancien)
+                $query = "SELECT Matchs.idMatch, dateMatch
+                          FROM Matchs
+                          JOIN EtreSelectionner ON Matchs.idMatch = EtreSelectionner.idMatch
+                          WHERE EtreSelectionner.numLicence = :numLicence
+                          AND Matchs.dateMatch < NOW()
+                          ORDER BY Matchs.dateMatch DESC";
+            
+                $matches = $this->createRequest($query, [':numLicence' => $numLicence]);
+            
+                if (empty($matches)) {
+                    return 0; // Aucun match trouvé
+                }
+            
+                $consecutiveCount = 0;
+                $previousDate = null;
+            
+                foreach ($matches as $match) {
+                    // Vérifie que $match est un tableau associatif
+                    if (!is_array($match) || !isset($match['dateMatch'])) {
+                        continue; // Passe à l'itération suivante si $match est invalide
+                    }
+            
+                    // Vérifie si la date est bien une chaîne de caractères
+                    $currentDate = new DateTime($match['dateMatch']);
+            
+                    if ($previousDate === null) {
+                        // Premier match traité
+                        $consecutiveCount++;
+                    } else {
+                        // Vérifie si la différence entre les dates dépasse 1 jour (pas consécutif)
+                        $diff = $previousDate->diff($currentDate)->days;
+                        if ($diff > 1) {
+                            break; // Pas consécutif, stoppe la boucle
+                        }
+                        $consecutiveCount++;
+                    }
+            
+                    $previousDate = $currentDate;
+                }
+            
+                return $consecutiveCount;
+            }
             
             
             
@@ -193,7 +304,7 @@
                 ];
                 $result = $this->createRequest("SELECT * FROM Sets WHERE idMatch = :idMatch ORDER BY idSet", $param);
                 return (!is_array($result)) ? [] : $result; 
-            }   
+            }
 
 
             public function getMatch($idMatch) {

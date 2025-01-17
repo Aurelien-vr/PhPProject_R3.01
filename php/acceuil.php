@@ -22,12 +22,7 @@
 
 
        // Calcul des pourcentages
-       $query = "SELECT 
-                   SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
-                   SUM(CASE WHEN avoirGagnerMatchON = 0 THEN 1 ELSE 0 END) AS perdus,
-                   SUM(CASE WHEN avoirGagnerMatchON IS NULL THEN 1 ELSE 0 END) AS non_renseignes
-                 FROM Matchs WHERE DATE(dateMatch) <= CURDATE()";
-       $stats = $bdd->createRequest($query, []);
+       $stats = $bdd->getPourcentagesMatchs();
         
        $gagnes = $stats['gagnes'] ?? 0;
        $perdus = $stats['perdus'] ?? 0;
@@ -57,30 +52,10 @@
             #6c757d " . (($pourcentage_gagnes + $pourcentage_perdus) * 360 /100) . "deg
         );";
 
-        $query = "
-        SELECT 
-            joueur.nom AS joueur,
-            ROUND(AVG(nj.note), 2) AS moyenne_note
-        FROM 
-            NotesJoueur nj
-        JOIN 
-            Joueurs joueur ON nj.idJoueur = joueur.numLicence
-        GROUP BY 
-            joueur.nom
-        ORDER BY 
-            moyenne_note DESC
-        LIMIT 3;
-        ";
-
-        $topJoueurs = $bdd->createRequest($query, []);
-
         include 'header.php'; 
        
        // Call getMatch and print the match details to the console
-       
-       $matchDetails = $bdd->getMatchsPassee();
-       echo "<script>console.log('Match Details: " . json_encode($matchDetails) . "');</script>";
-    ?>
+       ?>
 
 <div class="acceuilPCdiv">
     <h1 class="h1">Statistiques des matchs passés</h1>
@@ -88,38 +63,67 @@
         <div class="pie-chart" style="<?= $pie_chart_style ?>"></div>
         <div class="legend">
             <?php if ($total > 0): ?>
-                <div><span class="green"></span>Matchs Gagnés (<?= round($pourcentage_gagnes, 2) ?>%)</div>
-                <div><span class="red"></span>Matchs Perdus (<?= round($pourcentage_perdus, 2) ?>%)</div>
+                <div><span class="green"></span>Matchs Gagnés (<?= round($pourcentage_gagnes, 2) ?>%, <?= $gagnes ?>/<?= $total ?>)</div>
+                <div><span class="red"></span>Matchs Perdus (<?= round($pourcentage_perdus, 2) ?>%, <?= $perdus ?>/<?= $total ?>)</div>
                 <div><span class="gray"></span>Non Renseignés (<?= round($pourcentage_non_renseignes, 2) ?>%)</div>
             <?php else: ?>
                 <div><span class="gray"></span>Aucune donnée disponible</div>
             <?php endif; ?>
         </div>
     </div>
-    <h2>Podium des meilleurs joueurs</h2>
-    <div class="podium">
-        <?php if (!empty($topJoueurs)): ?>
-        <div class="place first">
-            <span class="medal">🥇</span>
-            <strong><?= $topJoueurs[0]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[0]['moyenne_note'] ?>)
-        </div>
-        <?php if (isset($topJoueurs[1])): ?>
-        <div class="place second">
-            <span class="medal">🥈</span>
-            <strong><?= $topJoueurs[1]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[1]['moyenne_note'] ?>)
-        </div>
-        <?php endif; ?>
-        <?php if (isset($topJoueurs[2])): ?>
-        <div class="place third">
-            <span class="medal">🥉</span>
-            <strong><?= $topJoueurs[2]['joueur'] ?></strong> (Moyenne : <?= $topJoueurs[2]['moyenne_note'] ?>)
-        </div>
-        <?php endif; ?>
-        <?php else: ?>
-            <p>Aucune donnée disponible pour le podium.</p>
-            <?php endif; ?>
-        </div>
 </div>
+<div id="containerTable">
+    <?php
+       // Récupération des joueurs actifs
+       $joueurs = $bdd->getJoueurs();
 
+       // Ajout de la table avec les informations supplémentaires
+       echo '<table>';
+       echo '<thead>';
+       echo '<tr>';
+       echo '<th>Numéro de Licence</th>';
+       echo '<th>Nom</th>';
+       echo '<th>Statut</th>';
+       echo '<th>Poste Favori</th>';
+       echo '<th>Titularisations</th>';
+       echo '<th>Remplacements</th>';
+       echo '<th>Notation Moyenne</th>';
+       echo '<th>Nb Matchs Consécutifs</th>';
+       echo '<th>% Matchs Gagnés</th>';
+       echo '</tr>';
+       echo '</thead>';
+       echo '<tbody>';
+
+       // Parcours des joueurs et récupération des informations
+       foreach ($joueurs as $joueur) {
+           $numLicence = $joueur['numLicence'];
+           $nom = $joueur['nom'] . ' ' . $joueur['prenom'];
+
+           $statut = $joueur['statutJoueur'];
+           $posteFavori = $bdd->getPosteFavJoueur($numLicence);
+           $nbTitularisations = $bdd->getNbTitularisation($numLicence); // A faire
+           $nbRemplacements = $bdd->getNbRemplacements($numLicence); // A faire
+           $notationMoyenne = $bdd->getAVGNotationJoueur($numLicence);
+           $nbMatchsConsecutifs = $bdd->getNbMatchConsecutif($numLicence); // A faire
+           $pourcentageMatchsGagnes = $bdd->getPourcentagesMatchsGagnerJoueur($numLicence); // A faire
+
+           // Affichage des données dans la table
+           echo '<tr>';
+           echo '<td>' . htmlspecialchars($numLicence) . '</td>';
+           echo '<td>' . htmlspecialchars($nom) . '</td>';
+           echo '<td>' . htmlspecialchars($statut) . '</td>';
+           echo '<td>' . htmlspecialchars($posteFavori) . '</td>';
+           echo '<td>' . htmlspecialchars($nbTitularisations) . '</td>';
+           echo '<td>' . htmlspecialchars($nbRemplacements) . '</td>';
+           echo '<td>' . htmlspecialchars($notationMoyenne) . '</td>';
+           echo '<td>' . htmlspecialchars($nbMatchsConsecutifs) . '</td>';
+           echo '<td>' . htmlspecialchars($pourcentageMatchsGagnes) . '%</td>';
+           echo '</tr>';
+       }
+
+       echo '</tbody>';
+       echo '</table>';
+    ?>
+    </div>
 </body>
 </html>
