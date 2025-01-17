@@ -24,7 +24,7 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
     <title>Volley Manager</title>
 </head>
 <body>
-<button onclick="window.location.href = 'ajout_match.php';">AJOUTER MATCH</button>
+<button onclick="window.location.href = 'ajout_match.php';" class="bouttonAjouter">AJOUTER MATCH</button>
 
 <div id="containerTable">
     <table>
@@ -43,7 +43,7 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
                 $id = htmlspecialchars($matchPassee['IDMatch']);
                 $date = htmlspecialchars($matchPassee['dateMatch']);
                 $adversaire = htmlspecialchars($matchPassee['nomAdversaires']);
-                $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']) . '<br>Domicile: ' . htmlspecialchars($matchPassee['domicileON']);
+                $details = 'Lieu: ' . htmlspecialchars($matchPassee['lieuRencontre']) .'<br/>' . ($matchPassee['domicileON'] == 1 ? 'Match à domicile' : 'Match pas à domicile');
         
                 if (is_null($matchPassee['avoirGagnerMatchON'])) {
                     $resultClass = 'match-inconnu'; // Gris pour les valeurs nulles
@@ -89,9 +89,6 @@ function toggleRow(row) {
     }
 }
 
-function confirmDelete() {
-    return confirm('Are you sure you want to delete this match?');
-}
 </script>
 
 </body>

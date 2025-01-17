@@ -496,7 +496,7 @@
                 return $this->createRequest(
                     "UPDATE Matchs 
                      SET dateMatch = :dateMatch, nomAdversaires = :nomAdversaires, lieuRencontre = :lieuRencontre, 
-s                         domicileON = :domicileON, avoirGagnerMatchON = :avoirGagnerMatchON
+                         domicileON = :domicileON, avoirGagnerMatchON = :avoirGagnerMatchON
                      WHERE IDMatch = :idMatch",
                     $param
                 );

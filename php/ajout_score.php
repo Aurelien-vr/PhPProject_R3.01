@@ -1,75 +1,147 @@
 <?php
-    function isValidVolleyballScore($scoreEquipe, $scoreAdversaire, $tieBreak) {
-        if ($scoreEquipe < 0 || $scoreAdversaire < 0) {
-            return false;
-        }
-
-        if ($tieBreak) {
-            $winningScore = 15;
-        } else {
-            $winningScore = 25;
-        }
-        
-        if (($scoreEquipe >= $winningScore || $scoreAdversaire >= $winningScore) &&
-            abs($scoreEquipe - $scoreAdversaire) >= 2) {
-            return true;
-        }
-
+function isValidVolleyballScore($scoreEquipe, $scoreAdversaire, $tieBreak) {
+    if ($scoreEquipe < 0 || $scoreAdversaire < 0) {
         return false;
     }
-    require_once 'bdd.php';
-    $db = new BDD();
 
-    $insert = true;    
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_id'])) {
-        $idMatch = $_POST['match_id'];
-        $match = $db->getMatch($idMatch);
-    
-        if (is_null($match) || empty($match)) {
-            // Redirection ou message d'erreur si le match est invalide
-            // header("Location: match_passes.php");
-            // exit();
-        } else {
-            $sets = $db->getSets($idMatch);
-    
-            if (!is_null($sets) && !empty($sets)) {
-                $insert = false;
-            }
+    if ($tieBreak) {
+        if((($scoreEquipe > 15 || $scoreAdversaire > 15)) && abs($scoreEquipe - $scoreAdversaire) != 2) {
+            return false;
+        }
+        if ($scoreEquipe < 15 && $scoreAdversaire < 15) {
+            return false;
+        }
+    } else {
+        if((($scoreEquipe > 25 || $scoreAdversaire > 25)) && abs($scoreEquipe - $scoreAdversaire) != 2) {
+            return false;
+        }
+        if ($scoreEquipe < 25 && $scoreAdversaire < 25) {
+            return false;
         }
     }
-    // echo "<script>console.log('POST Data: ', " . json_encode($_POST) . ");</script>";
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sets']) && is_array($_POST['sets'])) {
 
-            // echo "<script>console.log('Sets Data: ', " . json_encode($_POST['sets']) . ");</script>";
-            $c = 0;
-            foreach ($_POST['sets'] as $set) {
-                $scoreEquipe = $set['scoreEquipe'];
-                $scoreAdversaire = $set['scoreAdversaire'];
-                $tieBreak = isset($set['tieBreak']) ? 1 : 0;
-                
-                if (isValidVolleyballScore($scoreEquipe, $scoreAdversaire, $tieBreak)) {
-                    if($insert){
-                        $db->insertSet($scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch);
-                    } else {
-                        var_dump($c);
-                        var_dump($sets[$c]['IDSet']);
-                        $db->updateSet($sets[$c]['IDSet'], $scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch);
-                    }
-                } else {
-                    echo "<script>alert('Invalid score for set');</script>";
-                }
-                $c++;
-            }
+    return true;
+}
 
-            // calculer qui a gagner le match
+function calculateMatchResult($sets) {
+    $teamAWins = 0;
+    $teamBWins = 0;
 
-        // echo "<script>console.log('All Sets: ', " . json_encode($db->getSets()) . ");</script>";
-
+    foreach ($sets as $set) {
+        if ($set['scoreEquipe'] > $set['scoreAdversaire']) {
+            $teamAWins++;
+        } else {
+            $teamBWins++;
+        }
     }
-?>
 
+    if ($teamAWins >= 3 || $teamBWins >= 3) {
+        return $teamAWins > $teamBWins ? 1 : 0;
+    }
+
+    return null;
+}
+
+function isValidMatch($sets) {
+    $teamAWins = 0;
+    $teamBWins = 0;
+
+    foreach ($sets as $set) {
+        if ($set['scoreEquipe'] > $set['scoreAdversaire']) {
+            $teamAWins++;
+        } else {
+            $teamBWins++;
+        }
+    }
+
+    $totalSets = count($sets);
+
+    if ($totalSets < 3 || $totalSets > 5) {
+        return false;
+    }
+
+    if ($totalSets == 3 && ($teamAWins == 3 || $teamBWins == 3)) {
+        return true;
+    }
+
+    if ($totalSets == 4 && (($teamAWins == 3 && $teamBWins == 1) || ($teamAWins == 1 && $teamBWins == 3))) {
+        return true;
+    }
+
+    if ($totalSets == 5 && (($teamAWins == 3 && $teamBWins == 2) || ($teamAWins == 2 && $teamBWins == 3))) {
+        return true;
+    }
+
+    return false;
+}
+
+require_once 'bdd.php';
+$db = new BDD();
+
+$insert = true;    
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_id'])) {
+    $idMatch = $_POST['match_id'];
+    $match = $db->getMatch($idMatch);
+
+    if (is_null($match) || empty($match)) {
+        // Redirection ou message d'erreur si le match est invalide
+        // header("Location: match_passes.php");
+        // exit();
+    } else {
+        $sets = $db->getSets($idMatch);
+
+        if (!is_null($sets) && !empty($sets)) {
+            $insert = false;
+        }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sets']) && is_array($_POST['sets'])) {
+    $setsData = [];
+    $validSets = true;
+
+    foreach ($_POST['sets'] as $index => $set) {
+        $scoreEquipe = $set['scoreEquipe'];
+        $scoreAdversaire = $set['scoreAdversaire'];
+        $tieBreak = ($index == 5) ? 1 : 0; // Automatically set tieBreak for the fifth set
+
+        echo "<script>console.log('tieBreak: $tieBreak');</script>";
+
+        if (isValidVolleyballScore($scoreEquipe, $scoreAdversaire, $tieBreak)) {
+            $setsData[] = ['scoreEquipe' => $scoreEquipe, 'scoreAdversaire' => $scoreAdversaire, 'tieBreak' => $tieBreak];
+        } else {
+            $validSets = false;
+            echo "<script>alert('Invalid score for set');</script>";
+            break;
+        }
+    }
+
+    if ($validSets && isValidMatch($setsData)) {
+        $c = 0;
+        foreach ($setsData as $set) {
+            if ($insert) {
+                $db->insertSet($set['scoreEquipe'], $set['scoreAdversaire'], $set['tieBreak'], $idMatch);
+            } else {
+                $db->updateSet($sets[$c]['IDSet'], $set['scoreEquipe'], $set['scoreAdversaire'], $set['tieBreak'], $idMatch);
+            }
+            $c++;
+        }
+
+        $matchResult = calculateMatchResult($setsData);
+        echo "<script>console.log('matchResult: $matchResult');</script>";
+        if (!is_null($matchResult)) {
+            $db->updateAvoirGagnerMatchON($idMatch, $matchResult);
+        }
+        header("Location: match_passes.php");
+        exit();
+    } else {
+        echo "<script>alert('Invalid match configuration');</script>";
+    }
+
+}
+?>
 
 <!DOCTYPE html>
 <html>
@@ -97,7 +169,7 @@
             const existingSet = sets[setCount - 1] || {}; // `setCount - 1` pour l'index
             const scoreEquipe = existingSet.scoreEquipe || '';
             const scoreAdversaire = existingSet.scoreAdversaire || '';
-            const tieBreak = existingSet.tieBreak ? 'checked' : '';
+            const tieBreak = (setCount === 5) ? 'checked' : (existingSet.tieBreak ? 'checked' : '');
 
             setDiv.innerHTML = `
             <h3>Set ${setCount}</h3>
@@ -108,12 +180,11 @@
 
             if (setCount === 5) {
                 setDiv.innerHTML += `
-                    <label for="tieBreak${setCount}">Tie Break:</label>
-                    <input type="checkbox" id="tieBreak${setCount}" name="sets[${setCount}][tieBreak]" ${tieBreak}>`;
+                    <input type="hidden" name="sets[${setCount}][tieBreak]" value="1">`;
             }
 
-            if (insert) {
-                setDiv.innerHTML += `<button type="button" onclick="removeSet(${setCount})">Remove Set</button>`;
+            if (insert && setCount <= 5) {
+                setDiv.innerHTML += `<button type="button" onclick="removeSet(${setCount})" class = "setAddByJs">Remove Set</button>`;
             }
             setsContainer.appendChild(setDiv);
         }
@@ -131,11 +202,11 @@
 
 <body>
     <?php include 'header.php'; ?>
-    <div class="container">
+    <div class="ajoutSets">
         <h1>Ajouter un Score pour le Match ID: <?= htmlspecialchars($idMatch) ?></h1>
-        <form method="POST" action="ajout_score.php">
+        <form method="POST" action="ajout_score.php" id="ajoutScoreForm">
             <input type="hidden" name="match_id" value="<?= htmlspecialchars($idMatch) ?>">
-            <div id="setsContainer">
+            <div id="setsContainer" class="sets-container">
                 <div class="form-group" id="set1">
                     <h3>Set 1</h3>
                     <label for="scoreEquipe1">Score Équipe:</label>
@@ -159,10 +230,10 @@
                 </div>
             </div>
             <?php if($insert): ?>
-                <button type="button" onclick='addSet()'>Ajouter un autre set</button>
+                <button type="button"  onclick='addSet()'>Ajouter un autre set</button>
             <?php endif; ?>
             
-            <button type="submit" class="editButton">Ajouter Scores</button>
+            <button type="submit" id="submit" class="formulaireInsertion">Ajouter le score</button>
         </form>
     </div>
 </body>
