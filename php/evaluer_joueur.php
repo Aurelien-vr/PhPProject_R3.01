@@ -28,17 +28,15 @@
                 $numLicence = $joueur['numLicence'];
                 
                 $notation = $_POST['notation'][$numLicence] ?? null;
-                $nbRemplacements = $_POST['nbRemplacement'][$numLicence] ?? null;
 
                 // Mise à jour uniquement si des valeurs sont disponibles
-                if (isset($notation, $nbRemplacements)) {
+                if (isset($notation)) {
                     $db->updateEtreSelectionner(
                         $numLicence,
                         $idMatch,
                         $joueur['titulaireON'],
                         $joueur['poste'],
-                        $notation,
-                        $nbRemplacements
+                        $notation
                     );
                 }
             }
@@ -61,7 +59,6 @@
                     <th>Poste</th>
                     <th>Titulaire</th>
                     <th>Notation</th>
-                    <th>Nombre de remplacements</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,20 +71,17 @@
                     $poste = htmlspecialchars($joueur['poste']);
                     $titulaire = $joueur['titulaireON'] ? 'Oui' : 'Non';
                     $notation = htmlspecialchars($joueur['notationJoueur'] ?? '');
-                    $nbRemplacement = htmlspecialchars($joueur['nbRemplacements'] ?? '');
             ?>
                 <tr>
                     <td><?= $id ?></td>
                     <td><?= $name ?></td>
                     <td><?= $poste ?></td>
                     <td><?= $titulaire ?></td>
-                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="10"></td>
-                    <td><input type="number" name="nbRemplacement[<?= $id ?>]" value="<?= $nbRemplacement ?>" min="0"></td>
-                </tr>
+                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="10"></td>                </tr>
             <?php
                 }
             } else {
-                echo "<tr><td colspan='6'>Aucun joueur trouvé.</td></tr>";
+                echo "<tr><td colspan='5'>Aucun joueur trouvé.</td></tr>";
             }
             ?>
             </tbody>

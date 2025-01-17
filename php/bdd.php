@@ -128,7 +128,7 @@
                     ':idMatch' => $idMatch
                 ];
                 $result = $this->createRequest(
-                    "SELECT p.numLicence, nom, prenom, poste, titulaireON, notationJoueur, nbRemplacements FROM EtreSelectionner e JOIN Joueurs j ON e.idJoueur = p.idJoueur WHERE idMatch = :idMatch",
+                    "SELECT p.numLicence, nom, prenom, poste, titulaireON, notationJoueur FROM EtreSelectionner e JOIN Joueurs j ON e.idJoueur = p.idJoueur WHERE idMatch = :idMatch",
                     $param
                 );
 
@@ -316,21 +316,41 @@
                 );
             }
             
-            public function insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, $notationJoueur, $nbRemplacements) {
+            public function insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, $notationJoueur) {
                 $param = [
                     ':numLicence' => $numLicence,
                     ':idMatch' => $idMatch,
                     ':titulaireON' => $titulaireON,
                     ':poste' => $poste,
-                    ':notationJoueur' => $notationJoueur,
-                    ':nbRemplacements' => $nbRemplacements
+                    ':notationJoueur' => $notationJoueur !== null ? $notationJoueur : null
                 ];
+            
                 return $this->createRequest(
-                    "INSERT INTO EtreSelectionner (numLicence, IDMatch, titulaireON, poste, notationJoueur, nbRemplacements)
-                    VALUES (:numLicence, :idMatch, :titulaireON, :poste, :notationJoueur, :nbRemplacements)",
+                    "INSERT INTO EtreSelectionner (numLicence, IDMatch, titulaireON, poste, notationJoueur)
+                     VALUES (:numLicence, :idMatch, :titulaireON, :poste, :notationJoueur)",
                     $param
                 );
             }
+            
+            public function updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, $notationJoueur) {
+                $param = [
+                    ':numLicence' => $numLicence,
+                    ':idMatch' => $idMatch,
+                    ':titulaireON' => $titulaireON,
+                    ':poste' => $poste,
+                    ':notationJoueur' => $notationJoueur !== null ? $notationJoueur : null
+                ];
+            
+                return $this->createRequest(
+                    "UPDATE EtreSelectionner 
+                     SET titulaireON = :titulaireON, poste = :poste, notationJoueur = :notationJoueur
+                     WHERE numLicence = :numLicence AND IDMatch = :idMatch",
+                    $param
+                );
+            }
+            
+            
+            
 
             // UPDATE
             public function updateJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
@@ -387,23 +407,8 @@ s                         domicileON = :domicileON, avoirGagnerMatchON = :avoirG
                     $param
                 );
             }
+
             
-            public function updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, $notationJoueur, $nbRemplacements) {
-                $param = [
-                    ':numLicence' => $numLicence,
-                    ':idMatch' => $idMatch,
-                    ':titulaireON' => $titulaireON,
-                    ':poste' => $poste,
-                    ':notationJoueur' => $notationJoueur,
-                    ':nbRemplacements' => $nbRemplacements
-                ];
-                return $this->createRequest(
-                    "UPDATE EtreSelectionner 
-                     SET titulaireON = :titulaireON, poste = :poste, notationJoueur = :notationJoueur, nbRemplacements = :nbRemplacements
-                     WHERE numLicence = :numLicence AND IDMatch = :idMatch",
-                    $param
-                );
-            }
 
             public function updateAvoirGagnerMatchON($idMatch, $avoirGagnerMatchON) {
                 $param = [

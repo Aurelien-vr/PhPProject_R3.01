@@ -13,17 +13,21 @@
     require 'bdd.php';
     $db = new BDD();
     $selected = [];
-    
+
     // Récupère tous les joueurs actifs
     $joueurs = $db->getJoueursActif();
 
-
     // Vérifie si un match a été sélectionné
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idMatch'])) {
-        $idMatch = $_POST['idMatch'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['id-match'])) {
+            $idMatch = $_POST['id-match'];
+        } else {
+            $idMatch = $_POST['idMatch'];
+        }
 
         // Recharge les données mises à jour dans $selected
         $result = $db->getJoueursPosteSelect($idMatch);
+        
         $selected = [];
         foreach ($result as $row) {
             if (isset($row['numLicence'], $row['poste'], $row['titulaireON'])) {
@@ -33,23 +37,28 @@
                 ];
             }
         }
-    
+
         foreach ($joueurs as $joueur) {
             $numLicence = $joueur['numLicence'];
-    
+        
             if (isset($_POST['select'][$numLicence])) {
                 $titulaireON = isset($_POST['titulaire'][$numLicence]) ? 1 : 0;
                 $poste = $_POST['posteJoueur'][$numLicence] ?? null;
-                if (array_key_exists($numLicence, $selected)) {
-                    $db->updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null, null);
-                } else {
-                    $db->insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null, null);
+        
+                if (!$poste) {
+                    continue;
                 }
-            } elseif (array_key_exists($numLicence, $selected)) {
+                // Insertion ou mise à jour
+                if (array_key_exists($numLicence, $selected)) {
+                    $db->updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
+                } else {
+                    $db->insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
+                }
+            } elseif (isset($_POST['id-match']) && array_key_exists($numLicence, $selected)) {
                 $db->deleteEtreSelectionner($numLicence, $idMatch);
             }
         }
-    
+        
         // Recharge les données mises à jour dans $selected
         $result = $db->getJoueursPosteSelect($idMatch);
         $selected = [];
@@ -62,12 +71,11 @@
             }
         }
     }
-    
-
-?><div id="containerTable">
+?>
+<div id="containerTable">
 <form method="POST" action="assigner_joueur.php">
     <!-- Champ caché pour idMatch -->
-    <input type="hidden" name="idMatch" value="<?= htmlspecialchars($idMatch) ?>">
+    <input type="hidden" name="id-match" value="<?= htmlspecialchars($idMatch ?? '') ?>">
 
     <table>
         <thead>
@@ -115,13 +123,13 @@
         <?php
             }
         } else {
-            echo "<tr><td colspan='7'>Aucun joueur trouve.</td></tr>";
+            echo "<tr><td colspan='7'>Aucun joueur trouvé.</td></tr>";
         }
         ?>
         </tbody>
     </table>
     <button type="submit">Assigner les joueurs</button>
-    <button type="reset">Reinitialiser</button>
+    <button type="reset">Réinitialiser</button>
 </form>
 </div>
 
