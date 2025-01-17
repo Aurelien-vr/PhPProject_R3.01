@@ -110,6 +110,7 @@
                 <th>Nom</th>
                 <th>Notation moyenne</th>
                 <th>Poste favori</th>
+                <th>Matchs Consecutifs</th>
                 <th>Selectionner Joueur</th>
                 <th>Poste assigne</th>
                 <th>Titulaire</th>
@@ -123,6 +124,7 @@
                 $name = htmlspecialchars($joueur['nom'] . ' ' . $joueur['prenom']);
                 $notation = htmlspecialchars($db->getAVGNotationJoueur($id));
                 $posteFavoris = htmlspecialchars($db->getPosteFavJoueur($id));
+                $matchConsec = htmlspecialchars($db->getNbMatchConsecutif($id));
 
                 $select = isset($selected[$id]);
                 $posteJoueur = $select ? htmlspecialchars($selected[$id]['poste']) : '';
@@ -134,6 +136,7 @@
                 <td><?= $name ?></td>
                 <td><?= $notation ?></td>
                 <td><?= $posteFavoris ?></td>
+                <td><?= $matchConsec ?></td>
                 <td><input type="checkbox" name="select[<?= $id ?>]" <?= $select ? 'checked' : '' ?>></td>
                 <td>
                     <select name="posteJoueur[<?= $id ?>]">
@@ -149,7 +152,7 @@
         <?php
             }
         } else {
-            echo "<tr><td colspan='7'>Aucun joueur trouvé.</td></tr>";
+            echo "<tr><td colspan='8'>Aucun joueur trouvé.</td></tr>";
         }
         ?>
         </tbody>
