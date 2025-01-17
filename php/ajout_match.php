@@ -55,7 +55,7 @@
 ?>
 
 <form action="ajout_match.php" method="POST">
-    <div id="ajoutMatch">
+    <div class="ajoutMatch">
         Date du Match* : 
         <input type="datetime-local" name="dateMatch" class="formulaireInsertion" required 
                 value="<?php echo htmlspecialchars($dateMatch); ?>"><br/>
@@ -72,8 +72,8 @@
         <input type="checkbox" name="domicileON" 
                <?php echo ($domicileON == 1) ? 'checked' : ''; ?>><br/>
 
-        <input type="submit" id="submit" value="VALIDER" class="formulaireInsertion">
-        <input type="reset" value="ANNULER" class="formulaireInsertion">
+        <input type="submit" id="submit" value="VALIDER" class="formulaireInsertion " onclick="location.href = 'match_futurs.php';">
+        <input type="reset" value="ANNULER" class="formulaireInsertion" onclick="location.href = 'match_futurs.php';">
     </div>
 </form>
 

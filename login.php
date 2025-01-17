@@ -5,7 +5,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
         <title>Volley Manager</title>
     </head>
-    <body>
+    <body class="login-page">
     <?php
         // http://localhost/PhPProject_R3.01/login.php
         // https://phpmyadmin.alwaysdata.com/phpmyadmin/index.php?route=/&route=%2F&lang=en

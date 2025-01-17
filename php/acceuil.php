@@ -26,7 +26,7 @@
                    SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
                    SUM(CASE WHEN avoirGagnerMatchON = 0 THEN 1 ELSE 0 END) AS perdus,
                    SUM(CASE WHEN avoirGagnerMatchON IS NULL THEN 1 ELSE 0 END) AS non_renseignes
-                 FROM Matchs WHERE DATE(dateMatch) <= CURDATE()";
+                 FROM Matchs WHERE DATE(dateMatch) < NOW()";
        $stats = $bdd->createRequest($query, []);
         
        $gagnes = $stats['gagnes'] ?? 0;

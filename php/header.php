@@ -15,7 +15,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 ?>
 <header>
     <nav>
-        <div class="nav"><a href="acceuil.php">ACCUEIL</a></div>
+        <div class="nav"><a href="acceuil.php">STATISTIQUES</a></div>
         <div class="nav"><a href="joueurs.php">JOUEURS</a></div>
         <div class="navs">
             <a href="match_futurs.php">MATCHS</a>
@@ -25,6 +25,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div><a href="ajout_match.php">NOUVEAU</a></div>
             </div>
         </div>
-        <div class="nav"><a href="deconnection.php">SE DECONNECTER</a></div>
+        <div class="navs">
+            <a>COMPTE</a>
+            <div class="submenu">
+                <div><a href="insert.php">NEW USER</a></div>
+                <div><a href="deconnection.php">DECONECTION</a></div>
+        </div>
     </nav>
 </header>

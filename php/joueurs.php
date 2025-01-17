@@ -1,9 +1,9 @@
 <?php
-    require_once 'bdd.php'; // Use require_once to ensure it's only included once
-    $db = new BDD(); 
-    $joueurs = $db->getJoueurs();
-    $joueursJson= json_encode($joueurs);
-    echo "<script>console.log('$joueursJson');</script>";
+require_once 'bdd.php'; // Use require_once to ensure it's only included once
+$db = new BDD(); 
+$joueurs = $db->getJoueurs();
+$joueursJson= json_encode($joueurs);
+echo "<script>console.log('$joueursJson');</script>";
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
                     echo "<tr class='collapsible' onclick='toggleRow(this)'>";
                     echo "<td>{$id}</td>";
                     echo "<td>{$name}</td>";
-                    echo "<td><form method='GET' action='ajout_joueurs.php'><button type='submit' class='editButton' name='numLicence' value='{$id}'>Edit player</button></form></td>";
+                    echo "<td><form method='POST' action='modifier_joueur.php'><button type='submit' class='editPlayerButton' name='player_id' value='{$id}'>Edit player</button></form></td>";
                     echo "</tr>";
                     echo "<tr class='hidden hiddenStill'>";
                     echo "<td colspan='3'>{$details}</td>";
@@ -55,9 +55,6 @@
         </tbody>
     </table>
 </div>
-
-<button onclick="window.location.href = 'ajout_joueurs.php';">AJOUTER JOUEUR</button>
-
 
 <script>
     function toggleRow(row) {

@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Volley Manager</title>
 </head>
-<body>
+<body class="insert-page">
 <?php
     session_start();
     if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
