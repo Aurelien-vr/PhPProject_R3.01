@@ -13,6 +13,7 @@
     require 'bdd.php';
     $db = new BDD();
     $selected = [];
+    $errorMessage = '';
 
     // Récupère tous les joueurs actifs
     $joueurs = $db->getJoueursActif();
@@ -38,41 +39,66 @@
             }
         }
 
-        foreach ($joueurs as $joueur) {
-            $numLicence = $joueur['numLicence'];
-        
-            if (isset($_POST['select'][$numLicence])) {
-                $titulaireON = isset($_POST['titulaire'][$numLicence]) ? 1 : 0;
-                $poste = $_POST['posteJoueur'][$numLicence] ?? null;
-        
-                if (!$poste) {
-                    continue;
+
+        // Comptage des titulaires envoyés par le formulaire
+        $totalTitulaireCount = 0;
+        if (isset($_POST['titulaire']) && is_array($_POST['titulaire'])) {
+            foreach ($_POST['titulaire'] as $titulaire) {
+                if ($titulaire) {
+                    $totalTitulaireCount++;
                 }
-                // Insertion ou mise à jour
-                if (array_key_exists($numLicence, $selected)) {
-                    $db->updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
-                } else {
-                    $db->insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
-                }
-            } elseif (isset($_POST['id-match']) && array_key_exists($numLicence, $selected)) {
-                $db->deleteEtreSelectionner($numLicence, $idMatch);
             }
         }
-        
-        // Recharge les données mises à jour dans $selected
-        $result = $db->getJoueursPosteSelect($idMatch);
-        $selected = [];
-        foreach ($result as $row) {
-            if (isset($row['numLicence'], $row['poste'], $row['titulaireON'])) {
-                $selected[$row['numLicence']] = [
-                    'poste' => $row['poste'],
-                    'titulaireON' => $row['titulaireON']
-                ];
+        // Vérification si le nombre total de titulaires est exactement 6
+        if ($totalTitulaireCount !== 6) {
+            // Affiche un message d'erreur si le nombre total de titulaires n'est pas 6
+            $errorMessage = 'Il faut exactement 6 joueurs titulaires. Veuillez vérifier votre sélection.';
+        } else {
+            // Traitement des modifications/ajouts/suppressions si le nombre est correct
+            foreach ($joueurs as $joueur) {
+                $numLicence = $joueur['numLicence'];
+            
+                if (isset($_POST['select'][$numLicence])) {
+                    $titulaireON = isset($_POST['titulaire'][$numLicence]) ? 1 : 0;
+                    $poste = $_POST['posteJoueur'][$numLicence] ?? null;
+            
+                    if (!$poste) {
+                        continue;
+                    }
+                    // Insertion ou mise à jour
+                    if (array_key_exists($numLicence, $selected)) {
+                        $db->updateEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
+                    } else {
+                        $db->insertEtreSelectionner($numLicence, $idMatch, $titulaireON, $poste, null);
+                    }
+                } elseif (isset($_POST['id-match']) && array_key_exists($numLicence, $selected)) {
+                    $db->deleteEtreSelectionner($numLicence, $idMatch);
+                }
+            }
+
+            // Recharge les données mises à jour dans $selected
+            $result = $db->getJoueursPosteSelect($idMatch);
+            $selected = [];
+            foreach ($result as $row) {
+                if (isset($row['numLicence'], $row['poste'], $row['titulaireON'])) {
+                    $selected[$row['numLicence']] = [
+                        'poste' => $row['poste'],
+                        'titulaireON' => $row['titulaireON']
+                    ];
+                }
             }
         }
     }
 ?>
+
+
+<?php if ($errorMessage): ?>
+    <div style="color: red; font-weight: bold; text-align: center;">
+        <?= $errorMessage ?>
+    </div>
+<?php endif; ?>
 <div id="containerTable">
+
 <form method="POST" action="assigner_joueur.php">
     <!-- Champ caché pour idMatch -->
     <input type="hidden" name="id-match" value="<?= htmlspecialchars($idMatch ?? '') ?>">
