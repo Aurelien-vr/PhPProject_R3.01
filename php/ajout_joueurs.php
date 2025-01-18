@@ -76,7 +76,7 @@
     }
 ?>
 <form action="ajout_joueurs.php" method="POST">
-    <div id="ajoutJoueur">
+    <div class="ajoutJoueurs">
         Numéro de Licence* : 
         <input type="text" name="numLicence" class="formulaireInsertion" required maxlength="50" 
                value="<?php echo htmlspecialchars($numLicence); ?>"><br/>
@@ -102,7 +102,7 @@
                value="<?php echo htmlspecialchars($poids); ?>"><br/>
         
         Statut actuel de Joueur : 
-        <select name="statutJoueur">
+        <select name="statutJoueur" class="formulaireInsertion">
             <option value="Actif" <?php echo ($statutJoueur === 'Actif') ? 'selected' : ''; ?>>Actif</option>
             <option value="Blessé" <?php echo ($statutJoueur === 'Blessé') ? 'selected' : ''; ?>>Blessé</option>
             <option value="Suspendu" <?php echo ($statutJoueur === 'Suspendu') ? 'selected' : ''; ?>>Suspendu</option>

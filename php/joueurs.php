@@ -16,6 +16,8 @@ echo "<script>console.log('$joueursJson');</script>";
 </head>
 <body>
 
+<button onclick="window.location.href = 'ajout_joueurs.php';" class="bouttonAjouter">AJOUTER JOUEUR</button>
+
 <?php include 'header.php';?>
 
 <div id="containerTable">

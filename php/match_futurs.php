@@ -75,8 +75,8 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                 echo "<td>$date</td>";
                 echo "<td>$adversaire</td>";
                 echo "<td>
-                        <form method='POST' action='assigner_joueur.php' style='display:inline;'>
-                            <button type='submit' class='editButton' name='idMatch' value='$id'>Associer des joueurs</button>
+                        <form method='POST' action='ajouterJoueurMatch.php' style='display:inline;'>
+                            <button type='submit' class='editButton' name='match_id' value='$id'>Ajout de joueurs</button>
                         </form>
                         <form method='POST' action='match_futurs.php' style='display:inline;'>
                             <input type='hidden' name='delete_match_id' value='$id'>

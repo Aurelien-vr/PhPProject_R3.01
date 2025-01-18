@@ -396,7 +396,7 @@ td > div {
 }
 
 
-.ajoutMatch, .ajoutSets{
+.ajoutMatch, .ajoutSets, .ajoutJoueurs {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -420,11 +420,11 @@ td > div {
     margin-top: 5%;
 }
 
-.ajoutMatch > *{
+.ajoutMatch > *, .ajoutSets > *, .ajoutJoueurs > * {
     scale: 1.3;
 }
 
-.ajoutMatch > #submit, .formulaireInsertion{
+.ajoutMatch > #submit, .ajoutSets > #submit, .ajoutJoueurs > #submit, .formulaireInsertion {
     scale : 1.4;
     padding: 1% 2% 1%  2%;
 }
@@ -454,3 +454,34 @@ td > div {
     display: flex;
     gap: 3%;
 }
+
+/* ...existing code... */
+
+.editButton, .deleteButton {
+    background-color: #b4dbeb; /* Light blue */
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+    scale: 0.9;
+}
+
+.editButton:hover {
+    background-color: #7ca6b5;
+}
+
+.deleteButton {
+    background-color: #e1394a3e;
+}
+
+.deleteButton:hover {
+    background-color: #b52b2b;
+}
+
