@@ -114,7 +114,13 @@
                value="<?php echo htmlspecialchars($commentaire); ?>"><br/>
         
         <input type="submit" id="submit" value="VALIDER" class="formulaireInsertion">
-        <input type="reset" value="ANNULER" class="formulaireInsertion">
+            <?php
+            if (isset($success) && $success) {
+                header("Location: joueurs.php");
+                exit();
+            }
+            ?>
+        <input type="reset" value="ANNULER" class="formulaireInsertion" onclick="window.location.href='joueurs.php';">
     </div>
 </form>
 

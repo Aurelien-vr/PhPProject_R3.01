@@ -9,7 +9,7 @@ ob_end_flush();
 $db = new BDD();
 $matchFutres = $db->getMatchsFutur();
 $matchFutresJson = json_encode($matchFutres);
-echo "<script>console.log('$matchFutresJson');</script>";
+echo "<script>console.log('Matches retrieved: $matchFutresJson');</script>";
 echo "<script>console.log('Request Method: " . $_SERVER['REQUEST_METHOD'] . "');</script>";
 
 
@@ -19,16 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deleteMatchId = intval($_POST['delete_match_id']); // Ensure it's an integer for safety
         echo "<script>console.log('Deleting match with ID: $deleteMatchId');</script>";
 
-        // Call the delete function
-        if ($db->deleteMatch($deleteMatchId)) {
-            echo "<script>console.log('Match successfully deleted');</script>";
-            header("Location: match_futurs.php");
-            exit();
-        } else {
-            echo "<script>console.log('Failed to delete match');</script>";
-            echo $db->getError();
-            
-        }
+        $db->deleteSelected($deleteMatchId);
+        $db->deleteMatch($deleteMatchId);
+       
+        header("Location: match_futurs.php"); // Redirect to avoid resubmission
+        exit();
     } else {
         echo "<script>console.log('No match ID provided');</script>";
     }
@@ -75,8 +70,9 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                 echo "<td>$date</td>";
                 echo "<td>$adversaire</td>";
                 echo "<td>
-                        <form method='POST' action='ajouterJoueurMatch.php' style='display:inline;'>
-                            <button type='submit' class='editButton' name='match_id' value='$id'>Ajout de joueurs</button>
+                        <form method='POST' action='assigner_joueur.php' style='display:inline;'>
+                            <input type='hidden' name='idMatch' value='$id'>
+                            <button type='submit' class='editButton'>Ajout de joueurs</button>
                         </form>
                         <form method='POST' action='match_futurs.php' style='display:inline;'>
                             <input type='hidden' name='delete_match_id' value='$id'>

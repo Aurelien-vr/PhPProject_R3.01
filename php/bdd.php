@@ -280,8 +280,24 @@
                 return $consecutiveCount;
             }
             
-            
-            
+            public function hasPlayedPastMatch($numLicence) {
+                $param = [
+                    ':numLicence' => $numLicence
+                ];
+                $query = "SELECT Matchs.dateMatch 
+                          FROM EtreSelectionner 
+                          JOIN Matchs ON EtreSelectionner.IDMatch = Matchs.IDMatch 
+                          WHERE EtreSelectionner.numLicence = :numLicence 
+                          AND Matchs.dateMatch < NOW()";
+                $result = $this->createRequest($query, $param);
+                
+                // Check if any past matches are found
+                if (is_array($result) && !empty($result)) {
+                    return true;
+                }
+                return false;
+            }
+
             public function getMatchsPassee() {
                 $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW() ORDER BY dateMatch DESC", []);
                 if (!is_array($result)) {
@@ -330,15 +346,16 @@
                 );
             }           
             
-            public function getEtreSelectionner($numLicence, $idMatch) {
+            public function getEtreSelectionner($numLicence, $idMatch = null) {
                 $param = [
-                    ':numLicence' => $numLicence,
-                    ':idMatch' => $idMatch
+                    ':numLicence' => $numLicence
                 ];
-                return $this->createRequest(
-                    "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
-                    $param
-                );
+                $query = "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence";
+                if ($idMatch !== null) {
+                    $param[':idMatch'] = $idMatch;
+                    $query .= " AND IDMatch = :idMatch";
+                }
+                return $this->createRequest($query, $param);
             }
 
             public function hasSet($idMatch) {
@@ -393,11 +410,15 @@
                     ':domicileON' => $domicileON,
                     ':avoirGagnerMatchON' => $avoirGagnerMatchON
                 ];
-                return $this->createRequest(
+                $result = $this->createRequest(
                     "INSERT INTO Matchs (dateMatch, nomAdversaires, lieuRencontre, domicileON, avoirGagnerMatchON)
                     VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatchON)",
                     $param
                 );
+                if (!$result) {
+                    echo "<script>console.log('Error inserting match: " . $this->getError() . "');</script>";
+                }
+                return $result;
             }
             
             public function insertSet($scoreEquipe, $scoreAdversaire, $tieBreak, $idMatch) {
@@ -459,7 +480,6 @@
                     $param
                 );
             }
-            
             
             
 
@@ -549,8 +569,17 @@
                 $param = [
                     ':idMatch' => $idMatch
                 ];
+                // Delete related sets first to avoid foreign key constraint violation
+                $this->createRequest("DELETE FROM Sets WHERE IDMatch = :idMatch", $param);
+                return $this->createRequest("DELETE FROM Matchs WHERE IDMatch = :idMatch", $param);
+            }
+
+            public function deleteSelected($idMatch) {
+                $param = [
+                    ':idMatch' => $idMatch
+                ];
                 return $this->createRequest(
-                    "DELETE FROM Matchs WHERE IDMatch = :idMatch", 
+                    "DELETE FROM EtreSelectionner WHERE IDMatch = :idMatch", 
                     $param
                 );
             }
