@@ -350,8 +350,6 @@
                     "SELECT * FROM Matchs WHERE IDMatch = :idMatch", 
                     $param
                 );
-                // Print match details to the console
-                echo "<script>console.log('Match Details: " . json_encode($match) . "');</script>";
                 return $match;
             }
 
@@ -433,9 +431,6 @@
                     VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatchON)",
                     $param
                 );
-                if (!$result) {
-                    echo "<script>console.log('Error inserting match: " . $this->getError() . "');</script>";
-                }
                 return $result;
             }
             
@@ -575,7 +570,6 @@
 
             // DELETE operations for removing data
             public function deleteJoueur($numLicence) {
-                var_dump($numLicence);
                 $param = [
                     ':numLicence' => $numLicence
                 ];
@@ -583,8 +577,6 @@
                     "DELETE FROM Joueurs WHERE numLicence = :numLicence", 
                     $param
                 );
-                var_dump($res);
-                echo $this->getError();
                 return $res;
             }
             
@@ -620,5 +612,3 @@
     ?>
     </body>
 </html>
-```
-</copilot-edited-file>

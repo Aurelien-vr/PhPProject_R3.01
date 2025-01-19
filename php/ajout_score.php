@@ -172,9 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sets']) && is_array($
             setDiv.innerHTML = `
             <h3>Set ${setCount}</h3>
             <label for="scoreEquipe${setCount}">Score Équipe:</label>
-            <input type="number" id="scoreEquipe${setCount}" name="sets[${setCount}][scoreEquipe]" value="${scoreEquipe}" required>
+            <input type="number" id="scoreEquipe${setCount}" name="sets[${setCount}][scoreEquipe]" value="${scoreEquipe}" min="0" required>
             <label for="scoreAdversaire${setCount}">Score Adversaire:</label>
-            <input type="number" id="scoreAdversaire${setCount}" name="sets[${setCount}][scoreAdversaire]" value="${scoreAdversaire}" required>`;
+            <input type="number" id="scoreAdversaire${setCount}" name="sets[${setCount}][scoreAdversaire]" value="${scoreAdversaire}" min="0" required>`;
 
             if (setCount === 5) {
                 setDiv.innerHTML += `
@@ -208,23 +208,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sets']) && is_array($
                 <div class="form-group" id="set1">
                     <h3>Set 1</h3>
                     <label for="scoreEquipe1">Score Équipe:</label>
-                    <input type="number" id="scoreEquipe1" name="sets[1][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[0]['scoreEquipe']); ?>" required>
+                    <input type="number" id="scoreEquipe1" name="sets[1][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[0]['scoreEquipe']); ?>" min="0" required>
                     <label for="scoreAdversaire1">Score Adversaire:</label>
-                    <input type="number" id="scoreAdversaire1" name="sets[1][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[0]['scoreAdversaire']); ?>" required>
+                    <input type="number" id="scoreAdversaire1" name="sets[1][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[0]['scoreAdversaire']); ?>" min="0" required>
                 </div>
                 <div class="form-group" id="set2">
                     <h3>Set 2</h3>
                     <label for="scoreEquipe2">Score Équipe:</label>
-                    <input type="number" id="scoreEquipe2" name="sets[2][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[1]['scoreEquipe']); ?>" required>
+                    <input type="number" id="scoreEquipe2" name="sets[2][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[1]['scoreEquipe']); ?>" min="0" required>
                     <label for="scoreAdversaire2">Score Adversaire:</label>
-                    <input type="number" id="scoreAdversaire2" name="sets[2][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[1]['scoreAdversaire']); ?>" required>
+                    <input type="number" id="scoreAdversaire2" name="sets[2][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[1]['scoreAdversaire']); ?>" min="0" required>
                 </div>
                 <div class="form-group" id="set3">
                     <h3>Set 3</h3>
                     <label for="scoreEquipe3">Score Équipe:</label>
-                    <input type="number" id="scoreEquipe3" name="sets[3][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[2]['scoreEquipe']); ?>" required>
+                    <input type="number" id="scoreEquipe3" name="sets[3][scoreEquipe]" value="<?php if(!$insert) echo htmlspecialchars($sets[2]['scoreEquipe']); ?>" min="0" required>
                     <label for="scoreAdversaire3">Score Adversaire:</label>
-                    <input type="number" id="scoreAdversaire3" name="sets[3][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[2]['scoreAdversaire']); ?>" required>
+                    <input type="number" id="scoreAdversaire3" name="sets[3][scoreAdversaire]" value="<?php if(!$insert) echo htmlspecialchars($sets[2]['scoreAdversaire']); ?>" min="0" required>
                 </div>
             </div>
             <?php if($insert): ?>

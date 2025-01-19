@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idMatch'])) {
                 );
             }
         }
+        if(isset($_POST['notation'][$numLicence])){
+            header('Location: ./match_passes.php');
+            exit();
+        }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<div class='error'>ID de match non spécifié.</div>";
@@ -77,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idMatch'])) {
                     <td><?= $name ?></td>
                     <td><?= $poste ?></td>
                     <td><?= $titulaire ?></td>
-                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="10"></td>
+                    <td><input type="number" name="notation[<?= $id ?>]" value="<?= $notation ?>" min="0" max="5"></td>
                 </tr>
             <?php
                 }
