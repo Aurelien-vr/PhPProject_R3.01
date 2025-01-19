@@ -290,7 +290,6 @@
                           WHERE EtreSelectionner.numLicence = :numLicence 
                           AND Matchs.dateMatch < NOW()";
                 $result = $this->createRequest($query, $param);
-                
                 // Check if any past matches are found
                 if (is_array($result) && !empty($result)) {
                     return true;
