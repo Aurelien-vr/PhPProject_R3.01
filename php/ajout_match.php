@@ -11,11 +11,11 @@
 <?php
     require 'bdd.php'; 
     $db = new BDD();
-    $dateMatch = null;
-    $nomAdversaires = null;
-    $lieuRencontre = null;
-    $domicileON = null;
-    $avoirGagnerMatchON = null;
+    $dateMatch = '';
+    $nomAdversaires = '';
+    $lieuRencontre = '';
+    $domicileON = '';
+    $avoirGagnerMatchON = '';
     $errorMessage = '';
 
     $insert = true;

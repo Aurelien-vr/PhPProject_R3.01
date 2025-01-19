@@ -69,7 +69,7 @@ if (is_array($matchPassees) && isset($matchPassees['IDMatch'])) {
                 }
                 echo "</button></form><form method='POST' action='evaluer_joueur.php' style='display:inline;'>
                             <button type='submit' class='editButton' name='idMatch' value='$id'>
-                            Noter les joueurs";
+                            Noter les joueurs</button></form>";
                 echo "</td></tr>";
                 echo "<tr class='hidden hiddenStill'>";
                 echo "<td colspan='4'>$details</td>";

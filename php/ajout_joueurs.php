@@ -1,8 +1,3 @@
-/**
- * Page de gestion des joueurs - Permet l'ajout et la modification des joueurs
- * Ce fichier gère à la fois le formulaire d'ajout et de modification des joueurs
- */
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -20,15 +15,15 @@
     $db = new BDD();
 
     // Initialisation des variables
-    $numLicence = null;
-    $nom = null;
-    $prenom = null;
-    $dateNaissance = null;
-    $taille = null;
-    $poids = null;
-    $statutJoueur = null;
-    $commentaire = null;
-    $insert = true;
+    $numLicence = '';
+    $nom = '';
+    $prenom = '';
+    $dateNaissance = '';
+    $taille = '';
+    $poids = '';
+    $statutJoueur = '';
+    $commentaire = '';
+    $insert = '';
 
     // Mode modification : récupération des données du joueur existant
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['numLicence'])) {
