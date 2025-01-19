@@ -19,6 +19,7 @@
     <?php
        include 'bdd.php';
        $bdd = new BDD();
+        $bdd->updateDateMatchs();
 
 
        // Calcul des pourcentages

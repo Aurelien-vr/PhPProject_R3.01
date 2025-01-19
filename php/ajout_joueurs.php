@@ -25,7 +25,6 @@
         $numLicence = $_GET['numLicence']; 
         $res = $db->getJoueur($numLicence);
         $insert = false;
-        echo 'caca';
     
         if ($res) {
             if (isset($res['nom'])) {
@@ -48,6 +47,9 @@
     // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $numLicence = $_POST['numLicence'];
+        if($db->getJoueur($numLicence)){
+            $insert = false;
+        }
         $nom = $_POST['nom'];
         $prenom = $_POST['prenom'];
         $dateNaissance = $_POST['dateNaissance'];

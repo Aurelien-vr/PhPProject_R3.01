@@ -7,27 +7,11 @@ include 'header.php';
 ob_end_flush();
 
 $db = new BDD();
+$db->updateDateMatchs();
 $matchFutres = $db->getMatchsFutur();
 $matchFutresJson = json_encode($matchFutres);
 echo "<script>console.log('Matches retrieved: $matchFutresJson');</script>";
 echo "<script>console.log('Request Method: " . $_SERVER['REQUEST_METHOD'] . "');</script>";
-
-
-// Handle delete match request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete_match_id']) && !empty($_POST['delete_match_id'])) {
-        $deleteMatchId = intval($_POST['delete_match_id']); // Ensure it's an integer for safety
-        echo "<script>console.log('Deleting match with ID: $deleteMatchId');</script>";
-
-        $db->deleteSelected($deleteMatchId);
-        $db->deleteMatch($deleteMatchId);
-       
-        header("Location: match_futurs.php"); // Redirect to avoid resubmission
-        exit();
-    } else {
-        echo "<script>console.log('No match ID provided');</script>";
-    }
-}
 
 // Ensure $matchFutres is an array of arrays
 if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
@@ -74,7 +58,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                             <input type='hidden' name='idMatch' value='$id'>
                             <button type='submit' class='editButton'>Ajout de joueurs</button>
                         </form>
-                        <form method='POST' action='match_futurs.php' style='display:inline;'>
+                        <form method='POST' action='supprimer_match.php' style='display:inline;'>
                             <input type='hidden' name='delete_match_id' value='$id'>
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>

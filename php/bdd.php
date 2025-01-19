@@ -143,6 +143,13 @@
                 return $result;
             }
 
+            public function updateDateMatchs(){
+                $query = "UPDATE Matchs
+                        SET etreMatchPasseON = 1
+                        WHERE dateMatch < NOW()";
+                $result = $this->createRequest($query,[]);
+            }
+
             public function getPourcentagesMatchs(){
                 $query = "SELECT 
                         SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
@@ -241,7 +248,7 @@
                           FROM Matchs
                           JOIN EtreSelectionner ON Matchs.idMatch = EtreSelectionner.idMatch
                           WHERE EtreSelectionner.numLicence = :numLicence
-                          AND Matchs.dateMatch < NOW()
+                          AND Matchs.etreMatchPasseON = 1
                           ORDER BY Matchs.dateMatch DESC";
             
                 $matches = $this->createRequest($query, [':numLicence' => $numLicence]);
@@ -280,6 +287,7 @@
                 return $consecutiveCount;
             }
             
+            
             public function hasPlayedPastMatch($numLicence) {
                 $param = [
                     ':numLicence' => $numLicence
@@ -287,8 +295,7 @@
                 $query = "SELECT Matchs.dateMatch 
                           FROM EtreSelectionner 
                           JOIN Matchs ON EtreSelectionner.IDMatch = Matchs.IDMatch 
-                          WHERE EtreSelectionner.numLicence = :numLicence 
-                          AND Matchs.dateMatch < NOW()";
+                          WHERE EtreSelectionner.numLicence = :numLicence";
                 $result = $this->createRequest($query, $param);
                 // Check if any past matches are found
                 if (is_array($result) && !empty($result)) {
@@ -296,9 +303,13 @@
                 }
                 return false;
             }
-
+            
+            
+            
             public function getMatchsPassee() {
-                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch < NOW() ORDER BY dateMatch DESC", []);
+                $result = $this->createRequest("SELECT * 
+                FROM Matchs WHERE etreMatchPasseON = 1 
+                ORDER BY dateMatch DESC", []);
                 if (!is_array($result)) {
                     return [];
                 }
@@ -306,7 +317,9 @@
             }
 
             public function getMatchsFutur() {
-                $result = $this->createRequest("SELECT * FROM Matchs WHERE dateMatch >= NOW() ORDER BY dateMatch", []);
+                $result = $this->createRequest("SELECT * 
+                FROM Matchs WHERE etreMatchPasseON = 0 
+                ORDER BY dateMatch", []);
                 if (!is_array($result)) {
                     return [];
                 }
@@ -345,16 +358,15 @@
                 );
             }           
             
-            public function getEtreSelectionner($numLicence, $idMatch = null) {
+            public function getEtreSelectionner($numLicence, $idMatch) {
                 $param = [
-                    ':numLicence' => $numLicence
+                    ':numLicence' => $numLicence,
+                    ':idMatch' => $idMatch
                 ];
-                $query = "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence";
-                if ($idMatch !== null) {
-                    $param[':idMatch'] = $idMatch;
-                    $query .= " AND IDMatch = :idMatch";
-                }
-                return $this->createRequest($query, $param);
+                return $this->createRequest(
+                    "SELECT * FROM EtreSelectionner WHERE numLicence = :numLicence AND IDMatch = :idMatch", 
+                    $param
+                );
             }
 
             public function hasSet($idMatch) {
@@ -409,7 +421,7 @@
                     ':domicileON' => $domicileON,
                     ':avoirGagnerMatchON' => $avoirGagnerMatchON
                 ];
-                $result = $this->createRequest(
+                return $this->createRequest(
                     "INSERT INTO Matchs (dateMatch, nomAdversaires, lieuRencontre, domicileON, avoirGagnerMatchON)
                     VALUES (:dateMatch, :nomAdversaires, :lieuRencontre, :domicileON, :avoirGagnerMatchON)",
                     $param
@@ -479,6 +491,7 @@
                     $param
                 );
             }
+            
             
             
 
@@ -555,32 +568,25 @@
 
             // DELETE
             public function deleteJoueur($numLicence) {
+                var_dump($numLicence);
                 $param = [
                     ':numLicence' => $numLicence
                 ];
-                return $this->createRequest(
+                $res = $this->createRequest(
                     "DELETE FROM Joueurs WHERE numLicence = :numLicence", 
                     $param
                 );
+                var_dump($res);
+                echo $this->getError();
+                return $res;
             }
             
             public function deleteMatch($idMatch) {
                 $param = [
                     ':idMatch' => $idMatch
                 ];
-                // Delete related sets first to avoid foreign key constraint violation
-                $this->createRequest("DELETE FROM Sets WHERE IDMatch = :idMatch", $param);
+                $this->createRequest("DELETE FROM EtreSelectionner WHERE IDMatch = :idMatch", $param);
                 return $this->createRequest("DELETE FROM Matchs WHERE IDMatch = :idMatch", $param);
-            }
-
-            public function deleteSelected($idMatch) {
-                $param = [
-                    ':idMatch' => $idMatch
-                ];
-                return $this->createRequest(
-                    "DELETE FROM EtreSelectionner WHERE IDMatch = :idMatch", 
-                    $param
-                );
             }
             
             public function deleteSet($idSet) {

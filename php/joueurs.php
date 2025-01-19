@@ -1,39 +1,3 @@
-<?php
-require_once 'bdd.php';
-
-ob_start();
-include 'header.php';
-ob_end_flush();
-
-$db = new BDD();
-$joueurs = $db->getJoueurs();
-
-// Print the request method
-echo "<script>console.log('Request method: " . $_SERVER['REQUEST_METHOD'] . "');</script>";
-
-// Handle delete player request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete_player_id']) && !empty($_POST['delete_player_id'])) {
-        $deletePlayerId = intval($_POST['delete_player_id']);
-        error_log("Delete request received for player ID: " . $deletePlayerId);
-        if (!$db->hasPlayedPastMatch($deletePlayerId)) {
-            if ($db->deleteJoueur($deletePlayerId)) {
-                echo "<script>console.log('Request was POST before redirect');</script>";
-                header("Location: joueurs.php"); // Redirect to avoid resubmission
-                exit();
-            } else {
-                echo "<script>console.log('Failed to delete player');</script>";
-                echo $db->getError();
-            }
-        } else {
-            echo "<script>alert('Cannot delete player who has played past matches');</script>";
-        }
-    } else {
-        echo "<script>console.log('No player ID provided');</script>";
-    }
-}
-?>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -42,7 +6,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Volley Manager</title>
 </head>
 <body>
+<?php
+    require_once 'bdd.php';
 
+    ob_start();
+    include 'header.php';
+    ob_end_flush();
+
+    $db = new BDD();
+    $joueurs = $db->getJoueurs();
+?>
 <button onclick="window.location.href = 'ajout_joueurs.php';" class="bouttonAjouter">AJOUTER JOUEUR</button>
 
 <div id="containerTable">
@@ -71,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "<td>{$id}</td>";
                     echo "<td>{$name}</td>";
                     echo "<td>
-                            <form method='POST' action='modifier_joueur.php' style='display:inline;'>
-                                <button type='submit' class='editPlayerButton' name='player_id' value='{$id}'>Edit player</button>
+                            <form method='GET' action='ajout_joueurs.php' style='display:inline;'>
+                                <button type='submit' class='editPlayerButton' name='numLicence' value='{$id}'>Edit player</button>
                             </form>";
                     if (!$db->hasPlayedPastMatch($id)) {
-                        echo "<form method='POST' action='joueurs.php' style='display: inline;'>
+                        echo "<form method='POST' action='supprimer_joueur.php' style='display: inline;'>
                             <input type='hidden' name='delete_player_id' value='" . htmlspecialchars($id) . "'>
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>";

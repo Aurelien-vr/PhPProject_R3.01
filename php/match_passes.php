@@ -6,6 +6,7 @@ include 'header.php';
 ob_end_flush();
 
 $db = new BDD();
+$db->updateDateMatchs();
 $matchPassees = $db->getMatchsPassee();
 $matchPasseesJson = json_encode($matchPassees);
 echo "<script>console.log('$matchPasseesJson');</script>";
