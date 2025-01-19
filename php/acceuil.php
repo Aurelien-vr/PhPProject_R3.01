@@ -72,7 +72,7 @@
         </div>
     </div>
 </div>
-<div id="containerTable">
+<div class="divTabStat">
     <?php
        // Récupération des joueurs actifs
        $joueurs = $bdd->getJoueurs();

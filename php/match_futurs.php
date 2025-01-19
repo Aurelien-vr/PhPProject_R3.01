@@ -62,7 +62,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
             foreach ($matchFutres as $matchFutur) {
                 $id = htmlspecialchars($matchFutur['IDMatch']);
                 $date = htmlspecialchars($matchFutur['dateMatch']);
-                $adversaire = htmlspecialchars($matchFutur['nomAdversaires']); // Corrected key
+                $adversaire = htmlspecialchars($matchFutur['nomAdversaires']);
                 $details = 'Lieu: ' . htmlspecialchars($matchFutur['lieuRencontre']). '<br>Domicile: ' . htmlspecialchars($matchFutur['domicileON']);
 
                 echo "<tr class='collapsible' onclick='toggleRow(this)'>";
@@ -79,7 +79,7 @@ if (is_array($matchFutres) && isset($matchFutres['IDMatch'])) {
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>
                       </td>";
-                echo "</tr>";
+                echo "</tr>";   
                 echo "<tr class='hidden hiddenStill'>";
                 echo "<td colspan='4'>$details</td>";
                 echo "</tr>";

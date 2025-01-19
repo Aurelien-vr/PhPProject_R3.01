@@ -15,6 +15,7 @@ echo "<script>console.log('Request method: " . $_SERVER['REQUEST_METHOD'] . "');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete_player_id']) && !empty($_POST['delete_player_id'])) {
         $deletePlayerId = intval($_POST['delete_player_id']);
+        error_log("Delete request received for player ID: " . $deletePlayerId);
         if (!$db->hasPlayedPastMatch($deletePlayerId)) {
             if ($db->deleteJoueur($deletePlayerId)) {
                 echo "<script>console.log('Request was POST before redirect');</script>";
@@ -33,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -75,10 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <button type='submit' class='editPlayerButton' name='player_id' value='{$id}'>Edit player</button>
                             </form>";
                     if (!$db->hasPlayedPastMatch($id)) {
-                        echo "<form method='POST' action='joueurs.php' style='display:inline;' onsubmit='return confirmDelete();'>
-                            <input type='hidden' name='delete_player_id' value='$id'>
+                        echo "<form method='POST' action='joueurs.php' style='display: inline;'>
+                            <input type='hidden' name='delete_player_id' value='<?php echo htmlspecialchars($id); ?>'>
                             <button type='submit' class='deleteButton'>Delete</button>
-                      </form>";
+                        </form>";
                     }
                     echo "</td>";
                     echo "</tr>";
@@ -96,17 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script>
     function toggleRow(row) {
-        const nextRow = row.nextElementSibling;
-
-        if (nextRow && nextRow.classList.contains('hidden')) {
-            nextRow.classList.remove('hidden');
-        } else if (nextRow) {
-            nextRow.classList.add('hidden');
-        }
+    var nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.classList.contains('hiddenStill')) {
+        nextRow.classList.toggle('hidden');
     }
-
-    function confirmDelete() {
-        return confirm('Are you sure you want to delete this player?');
     }
 </script>
 
