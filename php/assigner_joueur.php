@@ -44,7 +44,7 @@
             $totalTitulaireCount = 0;
             if (isset($_POST['titulaire']) && is_array($_POST['titulaire'])) {
                 foreach ($_POST['titulaire'] as $titulaire) {
-                    if ($titulaire) {
+                    if ($titulaire && /** Vérifie si le titulaire est aussi sélectionner */ ) {
                         $totalTitulaireCount++;
                     }
                 }
@@ -94,7 +94,8 @@
 
 
 <?php if ($errorMessage): ?>
-    <div style="color: red; font-weight: bold; text-align: center;">
+    </br>
+    <div id="messageErreur"style="color: #3f0000">
         <?= $errorMessage ?>
     </div>
 <?php endif; ?>
