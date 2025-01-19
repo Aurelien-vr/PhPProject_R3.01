@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -7,21 +8,23 @@
     </head>
     <body class="login-page">
     <?php
-        // http://localhost/PhPProject_R3.01/login.php
-        // https://phpmyadmin.alwaysdata.com/phpmyadmin/index.php?route=/&route=%2F&lang=en
+        // Initialize variables
         $message = ''; // Initialiser la variable message
         $log = '';  // Initialiser le login
 
-        // Vérifier si un message de succès a été passé après une redirection
+        // Handle success message from redirect
         if (isset($_GET['message']) && $_GET['message'] == 'success') {
             $message = "Accès autorisé.";
         }
 
+        // Process login form submission
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validate login credentials
             if (!empty($_POST['username']) && !empty($_POST['password'])) {
                 $log = $_POST['username'];
                 $pwd = $_POST['password'];
 
+                // Database connection and verification
                 require 'php/bdd.php';
 
                 $BDD = new BDD();
@@ -51,6 +54,7 @@
             }
         }
     ?>
+    <!-- Login form container -->
     <div class="loginPannel">
         <h1 id="loginTitle">LOGIN</h1>
         <form action="login.php" method="POST">

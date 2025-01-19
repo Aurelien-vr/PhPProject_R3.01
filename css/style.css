@@ -1,3 +1,4 @@
+/* Global styles and page layout */
 body {
     font-family: 'Lexend', sans-serif;
     margin: 0;
@@ -25,6 +26,7 @@ body.insert-page {
     padding-top: 0; 
 }
 
+/* Typography and text containers */
 .h1, h2 {
     font-family: 'Lexend', sans-serif;
     width: 100vw;
@@ -49,6 +51,7 @@ body.insert-page {
     text-align: center;
 }
 
+/* Login page specific styles */
 .loginPannel {
     display: flex;
     flex-direction: column;
@@ -94,6 +97,7 @@ body.insert-page {
     font-family: inherit;
 }
 
+/* Form elements and controls */
 input {
     border-radius: 6px;
     height: 4vh;
@@ -137,6 +141,7 @@ input {
     color: red;
 }
 
+/* Navigation and header styles */
 header {
     background-color: #133f4e;
     color: white;
@@ -200,6 +205,7 @@ nav {
     display: block;
 }
 
+/* Data display and tables */
 #containerTable {
     display: flex;
     justify-content: center;
@@ -262,7 +268,7 @@ td > div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle bottom border */
 }
 
-/* Match result classes */
+/* Match result visual indicators */
 .match-gagne {
     background-color: #4ebb676d; /* Green for won matches */
     color: rgb(0, 0, 0);
@@ -277,9 +283,8 @@ td > div {
     color: rgb(0, 0, 0);
 }
 
-/* camenbert */
-
-.legend {
+/* Statistics visualization components */
+.pie-chart, .legend {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -304,49 +309,7 @@ td > div {
 .red { background-color: #dc3545; }
 .gray { background-color: #6c757d; }
 
-/* podium */
-.podium {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
-}
-
-.place {
-    text-align: center;
-    margin: 10px;
-    padding: 15px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 400px;
-    font-size: 1.2rem;
-    color: white;
-}
-
-.place.first {
-    background-color: gold;
-    color: black;
-    font-weight: bold;
-}
-
-.place.second {
-    background-color: silver;
-    color: black;
-    font-weight: bold;
-}
-
-.place.third {
-    background-color: #cd7f32; /* Couleur bronze */
-    color: black;
-    font-weight: bold;
-}
-
-.medal {
-    font-size: 1.5rem;
-    margin-right: 10px;
-}
-
+/* Player information display */
 #divPc {
     display: flex;
     flex-direction: column;
@@ -367,6 +330,7 @@ td > div {
     gap: 20px;
 }
 
+/* Action buttons and interactive elements */
 .editPlayerButton {
     background-color: #b4dbeb; /* Green */
     border: none;
@@ -387,6 +351,7 @@ td > div {
 }
 
 /* Style for the "AJOUTER MATCH" button */
+/* Floating action button */
 .bouttonAjouter {
     position: fixed;
     bottom: 20px;
@@ -408,7 +373,7 @@ td > div {
     outline: 1px solid #F1D35B;
 }
 
-
+/* Form layouts for data entry */
 .ajoutMatch, .ajoutSets, .ajoutJoueurs {
     display: flex;
     flex-direction: column;
@@ -470,6 +435,7 @@ td > div {
 
 /* ...existing code... */
 
+/* Action buttons styling */
 .editButton, .deleteButton {
     background-color: #b4dbeb; /* Light blue */
     border: none;

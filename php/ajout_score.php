@@ -86,9 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_id'])) {
     $match = $db->getMatch($idMatch);
 
     if (is_null($match) || empty($match)) {
-        // Redirection ou message d'erreur si le match est invalide
-        // header("Location: match_passes.php");
-        // exit();
+
     } else {
         $sets = $db->getSets($idMatch);
 

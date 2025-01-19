@@ -17,12 +17,12 @@
 </head>
 <body>
     <?php
+       // Initialize database connection
        include 'bdd.php';
        $bdd = new BDD();
         $bdd->updateDateMatchs();
 
-
-       // Calcul des pourcentages
+       // Statistical calculations for match results
        $stats = $bdd->getPourcentagesMatchs();
         
        $gagnes = $stats['gagnes'] ?? 0;
@@ -75,7 +75,7 @@
 </div>
 <div class="divTabStat">
     <?php
-       // Récupération des joueurs actifs
+       // Player statistics table generation
        $joueurs = $bdd->getJoueurs();
 
        // Ajout de la table avec les informations supplémentaires

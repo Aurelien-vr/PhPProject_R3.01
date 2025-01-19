@@ -1,3 +1,8 @@
+/**
+ * Page de gestion des joueurs - Permet l'ajout et la modification des joueurs
+ * Ce fichier gère à la fois le formulaire d'ajout et de modification des joueurs
+ */
+
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -8,9 +13,13 @@
 <body>
 
 <?php include 'header.php'; ?>
+
 <?php
+    // Configuration de la base de données
     require 'bdd.php'; 
     $db = new BDD();
+
+    // Initialisation des variables
     $numLicence = null;
     $nom = null;
     $prenom = null;
@@ -21,11 +30,13 @@
     $commentaire = null;
     $insert = true;
 
+    // Mode modification : récupération des données du joueur existant
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['numLicence'])) {
         $numLicence = $_GET['numLicence']; 
         $res = $db->getJoueur($numLicence);
         $insert = false;
     
+        // Si le joueur existe, remplir les champs avec ses données
         if ($res) {
             if (isset($res['nom'])) {
                 $res = [$res];
@@ -44,8 +55,9 @@
         }
     }
 
-    // Vérifier si le formulaire a été soumis
+    // Traitement du formulaire lors de la soumission
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Récupération des données du formulaire
         $numLicence = $_POST['numLicence'];
         if($db->getJoueur($numLicence)){
             $insert = false;
@@ -57,8 +69,10 @@
         $poids = !empty($_POST['poids']) ? $_POST['poids'] : null;
         $statutJoueur = $_POST['statutJoueur'];
         $commentaire = !empty($_POST['commentaire']) ? $_POST['commentaire'] : null;
+
+        // Insertion ou mise à jour selon le mode
         if (isset($insert) && $insert) {
-            // Vérifier si le numéro de licence existe déjà
+            // Vérification de l'unicité du numéro de licence
             $existingJoueur = $db->getJoueur($numLicence);
             if ($existingJoueur) {
                 echo "<div class='error'>Ce numéro de licence est déjà utilisé par le joueur " .
@@ -68,15 +82,19 @@
                 $success = $db->insertJoueur($numLicence, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire);
             }
         } else {
+            // Mise à jour d'un joueur existant
             $success = $db->updateJoueur($numLicence, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire);
         }
     
+        // Affichage du message de résultat
         if (isset($success)) {
             echo $success ? "<div class='success'>Le joueur a été ajouté/mis à jour avec succès !</div>"
                           : "<div class='error'>Une erreur est survenue : " . htmlspecialchars($db->getError()) . "</div>";
         }
     }
 ?>
+
+<!-- Formulaire d'ajout/modification de joueur -->
 <form action="ajout_joueurs.php" method="POST">
     <div class="ajoutJoueurs">
         Numéro de Licence* : 
@@ -125,7 +143,6 @@
         <input type="reset" value="ANNULER" class="formulaireInsertion" onclick="window.location.href='joueurs.php';">
     </div>
 </form>
-
 
 </body>
 </html>

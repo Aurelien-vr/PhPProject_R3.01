@@ -8,10 +8,13 @@
     </head>
     <body>
     <?php
+        // Database connection and configuration
         class BDD {
+            // Database connection properties
             private $pdo; 
             private $error;
 
+            // Constructor and connection initialization
             public function __construct() {
                 $this->error = '';
                 try {
@@ -37,6 +40,8 @@
             public function getError() {
                 return $this->error;
             }
+
+            // Core database operations
             public function createRequest($request, $param) {
                 $this->error = '';
                 try {
@@ -67,7 +72,8 @@
                 }
             }
 
-            // SELECT   
+            // SELECT operations for retrieving data
+            // Player-related queries
             public function getPWD($log) {
                 $param = [
                     ':login' => $log
@@ -150,6 +156,7 @@
                 $result = $this->createRequest($query,[]);
             }
 
+            // Match-related queries
             public function getPourcentagesMatchs(){
                 $query = "SELECT 
                         SUM(CASE WHEN avoirGagnerMatchON = 1 THEN 1 ELSE 0 END) AS gagnes,
@@ -388,7 +395,7 @@
                 return $result;
             }
             
-            // INSERT
+            // INSERT operations for adding new data
             public function insertJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
                 $param = [
                     ':id' => $id,
@@ -495,7 +502,7 @@
             
             
 
-            // UPDATE
+            // UPDATE operations for modifying existing data
             public function updateJoueur($id, $nom, $prenom, $dateNaissance, $taille, $poids, $statutJoueur, $commentaire) {
                 $param = [
                     ':id' => $id,
@@ -566,7 +573,7 @@
                 );
             }
 
-            // DELETE
+            // DELETE operations for removing data
             public function deleteJoueur($numLicence) {
                 var_dump($numLicence);
                 $param = [
@@ -613,3 +620,5 @@
     ?>
     </body>
 </html>
+```
+</copilot-edited-file>
