@@ -43,16 +43,18 @@
             // Comptage des titulaires envoyés par le formulaire
             $totalTitulaireCount = 0;
             if (isset($_POST['titulaire']) && is_array($_POST['titulaire'])) {
-                foreach ($_POST['titulaire'] as $titulaire) {
-                    if ($titulaire && /** Vérifie si le titulaire est aussi sélectionner */ ) {
+                foreach ($_POST['titulaire'] as $numLicence => $titulaire) {
+                    // Vérifie si le joueur est marqué comme sélectionné dans le formulaire
+                    if ($titulaire && isset($_POST['select'][$numLicence])) {
                         $totalTitulaireCount++;
                     }
                 }
             }
+
             // Vérification si le nombre total de titulaires est exactement 6
             if ($totalTitulaireCount !== 6) {
                 // Affiche un message d'erreur si le nombre total de titulaires n'est pas 6
-                $errorMessage = 'Il faut exactement 6 joueurs titulaires. Veuillez vérifier votre sélection.';
+                $errorMessage = 'Il faut exactement 6 joueurs titulaires sélectionnés. Veuillez vérifier votre sélection.';
             } else {
                 // Traitement des modifications/ajouts/suppressions si le nombre est correct
                 foreach ($joueurs as $joueur) {
