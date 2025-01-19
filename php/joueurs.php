@@ -58,13 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             if (is_array($joueurs) && !empty($joueurs)) {
                 foreach ($joueurs as $joueur) {
-                    $id = htmlspecialchars($joueur['numLicence']);
-                    $name = htmlspecialchars($joueur['nom'] . ' ' . $joueur['prenom']);
-                    $details = 'Date de naissance: ' . htmlspecialchars($joueur['dateNaissance']) .
-                    '<br>Taille: ' . htmlspecialchars($joueur['taille']) .
-                    '<br>Poids: ' . htmlspecialchars($joueur['poids']) .
-                    '<br>Statut: ' . htmlspecialchars($joueur['statutJoueur']) .
-                    '<br>Commentaire: ' . htmlspecialchars($joueur['commentaire']);
+                    $id = htmlspecialchars($joueur['numLicence'] ?? '');
+                    $name = htmlspecialchars(($joueur['nom'] ?? '') . ' ' . ($joueur['prenom'] ?? ''));
+                    $details = 'Date de naissance: ' . htmlspecialchars($joueur['dateNaissance'] ?? '') .
+                    '<br>Taille: ' . htmlspecialchars($joueur['taille'] ?? '') .
+                    '<br>Poids: ' . htmlspecialchars($joueur['poids'] ?? '') .
+                    '<br>Statut: ' . htmlspecialchars($joueur['statutJoueur'] ?? '') .
+                    '<br>Commentaire: ' . htmlspecialchars($joueur['commentaire'] ?? '');
 
 
                     echo "<tr class='collapsible' onclick='toggleRow(this)'>";
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </form>";
                     if (!$db->hasPlayedPastMatch($id)) {
                         echo "<form method='POST' action='joueurs.php' style='display: inline;'>
-                            <input type='hidden' name='delete_player_id' value='<?php echo htmlspecialchars($id); ?>'>
+                            <input type='hidden' name='delete_player_id' value='" . htmlspecialchars($id) . "'>
                             <button type='submit' class='deleteButton'>Delete</button>
                         </form>";
                     }
