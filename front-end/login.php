@@ -25,12 +25,11 @@
 </html>
 
 <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        // Hash the password
-        $hashed_password = hash_hmac('sha256', $password, 'FYHGFCVBNJKIUYHGFVBN?KLKJUHYT5TYH');
-        echo "<script>console.log('$hashed_password');</script>";
-    }
+    // Hash the password
+    $hashed_password = hash_hmac('sha256', $password, 'FYHGFCVBNJKIUYHGFVBN?KLKJUHYT5TYH');
+    echo "<script>console.log('$hashed_password');</script>";
+}
