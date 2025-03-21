@@ -5,11 +5,13 @@ require_once "gestionAuth.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+
 switch ($method) {
+
 case 'POST':
     $input = json_decode(file_get_contents('php://input'), true);
     $username = $input['username'];
-    $hashed_password = $input['password']; // Assuming the password is already hashed
+    $password = $input['password']; // Plain text password
 
     $conn = connectionDB();
         
@@ -22,7 +24,7 @@ case 'POST':
     $stored_password = getPasswordDB($username, $conn);
     disconectDB($conn);
 
-    if ($stored_password && $hashed_password === $stored_password) {
+    if ($stored_password && password_verify($password."feur", $stored_password)) {
         $secret = "your_secret_key";
         $headers = ['alg' => 'HS256', 'typ' => 'JWT'];
         $payload = [

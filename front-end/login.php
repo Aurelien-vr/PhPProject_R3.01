@@ -11,7 +11,7 @@
 <body class="login-page">
 <div class="loginPannel">
     <h1 id="loginTitle">LOGIN</h1>
-    <form action="login.php" method="POST">
+    <form action="http://localhost/PhPProject_R3.01/APIAutentification/endointAuth.php" method="POST">
         <div id="loginContainer">
             <input type="text" placeholder="username" value="" name="username"
                    class="fieldLogin" id="userNameId" required>
@@ -23,13 +23,3 @@
 </div>
 </body>
 </html>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Hash the password
-    $hashed_password = hash_hmac('sha256', $password, 'FYHGFCVBNJKIUYHGFVBN?KLKJUHYT5TYH');
-    echo "<script>console.log('$hashed_password');</script>";
-}
